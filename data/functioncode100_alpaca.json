@@ -1,0 +1,510 @@
+[
+    {
+        "instruction": "用Java实现解压一个zip文件，并将解压后的文件内容分别写入指定目录中的单独文件中的功能，需要考虑如何处理zip文件中的目录以及如何处理解压过程中可能出现的错误",
+        "input": "需要解压的zip文件路径zipFile,解压后文件保存目录dirFile",
+        "output": "public static void decodeFile(File zipFile, File dirFile) throws Exception { try { InputStream fis = new FileInputStream(zipFile);ZipInputStream zis = new ZipInputStream(fis);for(ZipEntry zipentry = zis.getNextEntry();zipentry != null;zipentry = zis.getNextEntry()) { if (!zipentry.isDirectory()) { String FileName = zipentry.getName();int length = (int)zipentry.getSize();char[] dataChar = new char[length];for(int i = 0;i < dataChar.length;++i) { dataChar[i] = (char)zis.read();} byte[] data = new byte[length];for(int i = 0;i < dataChar.length;++i) { data[i] = (byte)dataChar[i];} CreatFileByData(dirFile, FileName, data, zipentry);} zis.closeEntry();} zis.close();fis.close();} catch (Exception var10) { logger.error(\"程序发生异常，异常为:{}\", var10);} }"
+    },
+    {
+        "instruction": "用Java实现在指定目录下创建文件的功能，根据提供的文件名和数据字节数组，以及压缩条目来进行操作，确保文件被正确创建并设置最后修改时间的功能",
+        "input": "文件地址dirFile,文件名FileName,数据data,压缩条目zipentry",
+        "output": "private static void CreatFileByData(File dirFile, String FileName, byte[] data, ZipEntry zipentry) throws Exception { File file = new File(dirFile, FileName);File parentFile = file.getParentFile();if (!parentFile.exists()) { parentFile.mkdirs();} if (file.createNewFile()) { FileOutputStream fos = new FileOutputStream(file);fos.write(data);fos.close();file.setLastModified(zipentry.getTime());} }"
+    },
+    {
+        "instruction": "用Java实现递归删除指定目录及其子目录中的所有文件和文件夹的功能。通过判断目录是否存在，然后逐一删除文件和递归删除子目录来实现清理目录的功能。",
+        "input": "文件地址dirFile",
+        "output": "public static void deleteDirTree(File dirFile) throws Exception { if (dirFile.exists()) { if (dirFile.isFile()) { dirFile.delete();} else { File[] listFiles = dirFile.listFiles();for(int i = 0;i < listFiles.length;++i) { File file = listFiles[i];if (file.isFile()) { file.delete();} if (file.isDirectory()) { deleteDirTree(file);} } } } }"
+    },
+    {
+        "instruction": "用Java实现将一个目录及其内容复制到另一个目录中。接收源目录路径和目标目录路径作为参数，并在内部调用另一个重载方法来执行实际的复制操作",
+        "input": "源地址srcDir,目的地址desDir",
+        "output": "public static void copyDir2Dir(String srcDir, String desDir) throws Exception { File srcFileDir = new File(srcDir);copyDir2Dir(srcDir, srcFileDir, desDir);}"
+    },
+    {
+        "instruction": "用Java实现将一个文件复制到另一个位置。它接收源文件和目标文件作为参数，并在内部进行文件复制操作。如果源文件不存在，则返回 true；如果目标文件创建失败，则返回 false；否则复制成功，并设置目标文件的最后修改时间为源文件的最后修改时间",
+        "input": "源文件srcFile,目标文件desFile",
+        "output": "public static boolean copyFile(File srcFile, File desFile) throws Exception { if (!srcFile.exists()) { return true;} else { File dirFile = new File(desFile.getParent());if (!dirFile.exists()) { dirFile.mkdirs();} if (!desFile.createNewFile()) { return false;} else { FileInputStream fis = new FileInputStream(srcFile);FileOutputStream fos = new FileOutputStream(desFile);int length = fis.available();byte[] datas = new byte[length];fis.read(datas);fos.write(datas);fis.close();fos.close();desFile.setLastModified(srcFile.lastModified());return true;} } }"
+    },
+    {
+        "instruction": "用Java实现向源列表中添加新的源。它接收一个新源列表作为参数，并根据每个元素的类型创建相应的源对象，然后将其添加到源列表中",
+        "input": "newSource",
+        "output": "final void addSources(List newSources) { ArrayList l = new ArrayList(this.JarClassLoaderSource.length + newSources.size());l.addAll(Arrays.asList(this.JarClassLoaderSource));try { int i = 0;for (Iterator it = newSources.iterator();it.hasNext();++i) { Object act = it.next();if (act instanceof File) { l.add(new JarClassLoader.DirSource((File) act));} else { l.add(new JarClassLoader.JarSource((JarFile) act));} } } catch (MalformedURLException var6) { throw new IllegalArgumentException(var6.getMessage());} this.JarClassLoaderSource = (JarClassLoader.Source[]) ((JarClassLoader.Source[]) l.toArray(this.JarClassLoaderSource));}"
+    },
+    {
+        "instruction": "用Java实现从给定的特定规范属性集和主要属性集中获取指定名称的值。它接收三个参数，分别表示特定规范属性集、主要属性集和要查找的名称，并返回查找到的值。",
+        "input": "属性spec,主要属性main,name",
+        "output": " if (spec != null) { val = spec.getValue(name);} if (val == null && main != null) { val = main.getValue(name);} return val;}"
+    },
+    {
+        "instruction": "用Java实现在 JarClassLoaderSource 数组中查找指定名称的类。它接收类名、路径和包名斜杠形式作为参数，并在内部进行类加载和定义。如果找到指定名称的类，则返回其类对象；否则返回 null",
+        "input": "name, path, pkgnameSlashes",
+        "output": "protected Class simpleFindClass(String name, String path, String pkgnameSlashes) { for (int i = 0;i < this.JarClassLoaderSource.length;++i) { JarClassLoader.Source src = this.JarClassLoaderSource[i];byte[] data = src.getClassData(name, path);if (data != null) { byte[] d = PatchByteCode.patch(data, name);int j = name.lastIndexOf(46);String pkgName = name.substring(0, j);Package pkg = this.getPackageFast(pkgName, pkgnameSlashes, this.isSpecialResource(pkgnameSlashes));if (pkg != null) { if (pkg.isSealed() && !pkg.isSealed(src.getURL())) { throw new SecurityException(\"sealing violation\");} } else { Manifest man = src.getManifest();this.definePackage(pkgName, man, src.getURL());} return this.defineClass(name, d, 0, d.length, src.getProtectionDomain());} } return null;}"
+    },
+    {
+        "instruction": "从指定路径中读取类文件的内容并返回字节数组表示。它接收类名和路径作为参数，并在内部使用文件输入流进行读取操作。如果成功读取到类文件的内容，则返回表示类文件内容的字节数组；否则返回 null",
+        "input": "name, path",
+        "output": "protected byte[] readClass(String name, String path) throws IOException { File clsFile = new File(this.dir, path.replace('/', File.separatorChar));if (!clsFile.exists()) { return null;} else { int len = (int) clsFile.length();byte[] data = new byte[len];InputStream is = new FileInputStream(clsFile);for (int count = 0;count < len;count += is.read(data, count, len - count)) { } return data;} }"
+    },
+    {
+        "instruction": "用Java实现实现了一个方法，用于释放锁定。它会检查是否已经存在死掉的JAR文件集合，如果不存在，则创建一个新的集合对象。然后，对每个JarClassLoaderSource中的JarSource进行处理，将其原始JAR文件拷贝到临时文件中，并创建新的JarFile对象。最后，将新的JarFile对象添加到JAR文件集合中，并更新源数组",
+        "input": "",
+        "output": "public final void releaseLocks() { if (this.JarSet != null) { throw new IllegalStateException(\"Already had dead JARs: \" + this.JarSet);} else { this.JarSet = new HashSet();try { for (int i = 0;i < this.JarClassLoaderSource.length;++i) { if (this.JarClassLoaderSource[i] instanceof JarClassLoader.JarSource) { JarFile origJar = ((JarClassLoader.JarSource) this.JarClassLoaderSource[i]).getJarFile();File orig = new File(origJar.getName());if (orig.isFile()) { String name = orig.getName();int idx = name.lastIndexOf(46);String prefix;String suffix;if (idx == -1) { prefix = name;suffix = null;} else { prefix = name.substring(0, idx);suffix = name.substring(idx);} while (prefix.length() < 3) { prefix = prefix + \"x\";} File temp = File.createTempFile(prefix, suffix);temp.deleteOnExit();FileInputStream is = new FileInputStream(orig);try { FileOutputStream os = new FileOutputStream(temp);try { byte[] buf = new byte[4096];int j;while ((j = is.read(buf)) != -1) { os.write(buf, 0, j);} } finally { os.close();} } finally { is.close();} JarFile tempJar = new JarFile(temp);origJar.close();this.JarSet.add(tempJar);this.JarClassLoaderSource[i] = new JarClassLoader.JarSource(tempJar);log(\"#21114: replacing \" + orig + \" with \" + temp);} } } } catch (IOException var23) { notify(0, var23);} } }"
+    },
+    {
+        "instruction": "用Java实现从指定路径中读取类文件的内容并返回字节数组表示。它接收类名和路径作为参数，并在内部使用文件输入流进行读取操作。如果成功读取到类文件的内容，则返回表示类文件内容的字节数组；否则返回 null",
+        "input": "name, path",
+        "output": "protected byte[] readClass(String name, String path) throws IOException { File clsFile = new File(this.dir, path.replace('/', File.separatorChar));if (!clsFile.exists()) { return null;} else { int len = (int) clsFile.length();byte[] data = new byte[len];InputStream is = new FileInputStream(clsFile);for (int count = 0;count < len;count += is.read(data, count, len - count)) { } return data;} } }"
+    },
+    {
+        "instruction": "用Java实现从指定源中读取类文件的内容并返回字节数组表示。它接收类名和路径作为参数，并在内部使用源的输入流进行读取操作。如果成功读取到类文件的内容，则返回表示类文件内容的字节数组；否则返回 null",
+        "input": "name, path",
+        "output": "protected byte[] readClass(String name, String path) throws IOException { ZipEntry ze;try { ze = this.src.getEntry(path);} catch (IllegalStateException var8) { return null;} if (ze == null) { return null;} else { if (JarClassLoader.netbeans) { System.err.println(\"Loading \" + path + \" from \" + this.src.getName());} int len = (int) ze.getSize();byte[] data = new byte[len];InputStream is = this.src.getInputStream(ze);for (int count = 0;count < len;count += is.read(data, count, len - count)) { } return data;} }}"
+    },
+    {
+        "instruction": "用Java实现构造函数，用于初始化代理类加载器。它接收父类加载器数组和是否传递性作为参数，并在内部进行一些初始化操作，如设置映射关系、检查参数合法性等",
+        "input": "parents, transitive",
+        "output": "public ProxyClassLoader(ClassLoader[] parents, boolean transitive) { this.ClassLoaderMap = new HashMap();this.packageMap = new HashMap();this.canDestroy = false;if (parents.length == 0) { throw new IllegalArgumentException(\"ProxyClassLoader must have a parent\");} else { this.isTransitive = transitive;Set check = new HashSet(Arrays.asList(parents));if (check.size() < parents.length) { throw new IllegalArgumentException(\"duplicate parents\");} else if (check.contains((Object) null)) { throw new IllegalArgumentException(\"null parent in \" + check);} else { this.ClassLoaderParents = this._$625(parents);} } }"
+    },
+    {
+        "instruction": "用Java实现一个同步方法，用于向当前代理类加载器添加新的父类加载器。它接收一个父类加载器数组作为参数，并在内部进行一些检查和操作，如检查参数合法性、添加父类加载器等",
+        "input": "nueparents",
+        "output": "public synchronized void append(ClassLoader[] nueparents) throws IllegalArgumentException { if (nueparents == null) { throw new IllegalArgumentException(\"null parents array\");} else { for (int i = 0;i < nueparents.length;++i) { if (nueparents[i] == null) { throw new IllegalArgumentException(\"null parent\");} } this.ClassLoaderParents = this._$627(this.ClassLoaderParents, nueparents);} }"
+    },
+    {
+        "instruction": "用Java实现受保护的最终同步方法，用于加载类。它接收类名和是否解析类作为参数，并在内部进行一些操作，如设置加载提示、构造类文件路径、加载类等。加载过程中如果出现异常，则抛出 ClassNotFoundException 异常",
+        "input": "name, resolve",
+        "output": "protected final synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException { this.setHint(name);String filename = name.replace('.', '/').concat(\".class\");int idx = filename.lastIndexOf(47);if (idx == -1) { throw new ClassNotFoundException(\"Will not load classes from default package (\" + name + \")\");} else { String pkg = filename.substring(0, idx + 1);Class c = this._$643(name, filename, pkg);if (c == null) { throw new ClassNotFoundException(name);} else { if (resolve) { this.resolveClass(c);} return c;} } }"
+    },
+    {
+        "instruction": "用Java实现方法，用于获取资源的 URL。它接收资源名称作为参数，并在内部进行一些操作，如设置加载提示、获取包名、遍历父类加载器等。根据资源是否是特殊资源，以及是否找到资源，分别进行相应的处理并返回结果",
+        "input": "name",
+        "output": "public final URL getResource(String name) { if (name.indexOf(\"Separator\") > -1) { logger.info(name);} this.setHint(name);int slashIdx = name.lastIndexOf(47);if (slashIdx == -1) { } String pkg = name.substring(0, slashIdx + 1);URL retVal;if (this.isSpecialResource(pkg)) { for (int i = 0;i < this.ClassLoaderParents.length;++i) { if (this.shouldDelegateResource(pkg, this.ClassLoaderParents[i])) { if (this.ClassLoaderParents[i] instanceof ProxyClassLoader) { retVal = ((ProxyClassLoader) this.ClassLoaderParents[i]).findResource(name);} else { retVal = this.ClassLoaderParents[i].getResource(name);} if (retVal != null) { return retVal;} } } return this.findResource(name);} else { ClassLoader owner = null;if (owner != null) { return owner instanceof ProxyClassLoader ? ((ProxyClassLoader) owner).findResource(name) : owner.getResource(name);} else { retVal = null;for (int i = 0;i < this.ClassLoaderParents.length;++i) { owner = this.ClassLoaderParents[i];if (this.shouldDelegateResource(pkg, owner)) { if (owner instanceof ProxyClassLoader) { retVal = ((ProxyClassLoader) owner).findResource(name);} else { retVal = owner.getResource(name);} if (retVal != null) { this.ClassLoaderMap.put((new String(pkg)).intern(), owner);return retVal;} } } retVal = this.findResource(name);if (retVal != null) { this.ClassLoaderMap.put((new String(pkg)).intern(), this);} return retVal;} } }"
+    },
+    {
+        "instruction": "用Java实现方法，用于查找资源的枚举。它接收资源名称作为参数，并在内部进行一些操作，如设置加载提示、获取包名、遍历父类加载器等。根据是否应该委托给父类加载器，调用相应的方法来查找资源，并将结果合并为一个枚举返回",
+        "input": "name",
+        "output": "protected final synchronized Enumeration findResources(String name) throws IOException { this.setHint(name);int slashIdx = name.lastIndexOf(47);if (slashIdx == -1) { } String pkg = name.substring(0, slashIdx + 1);Enumeration[] es = new Enumeration[this.ClassLoaderParents.length + 1];for (int i = 0;i < this.ClassLoaderParents.length;++i) { if (!this.shouldDelegateResource(pkg, this.ClassLoaderParents[i])) { es[i] = arrayEnumeration;} else if (this.ClassLoaderParents[i] instanceof ProxyClassLoader) { es[i] = ((ProxyClassLoader) this.ClassLoaderParents[i]).simpleFindResources(name);} else { es[i] = this.ClassLoaderParents[i].getResources(name);} } es[this.ClassLoaderParents.length] = this.simpleFindResources(name);return new ProxyClassLoader.AAEnum(es);}"
+    },
+    {
+        "instruction": "用Java实现方法，方法，用于快速获取包。它接收包名、类名和是否递归作为参数，并在内部进行一些操作，如同步块锁定、获取包、递归查找包等。根据是否需要递归以及是否在父类加载器中找到包，返回相应的结果",
+        "input": "name, sname,recurse",
+        "output": "protected Package getPackageFast(String name, String sname, boolean recurse) { synchronized (this.packageMap) { Package pkg = (Package) this.packageMap.get(name);if (pkg != null) { return pkg;} else if (!recurse) { return null;} else { for (int i = 0;i < this.ClassLoaderParents.length;++i) { ClassLoader par = this.ClassLoaderParents[i];if (par instanceof ProxyClassLoader && this.shouldDelegateResource(sname, par)) { pkg = ((ProxyClassLoader) par).getPackageFast(name, sname, false);if (pkg != null) { break;} } } if (pkg == null && this.shouldDelegateResource(sname, this.getParent())) { pkg = super.getPackage(name);} if (pkg != null) { this.packageMap.put(name, pkg);} return pkg;} } }"
+    },
+    {
+        "instruction": "用Java实现方法，用于定义包。它接收多个参数，并在内部进行一些操作，如同步块锁定、调用父类方法定义包、捕获异常等。如果定义包成功，则将包对象存储到映射中并返回；如果出现异常，则记录异常到日志中并返回 null",
+        "input": "name, specTitle, specVersion, specVendor, implTitle, implVersion, implVendor, sealBase",
+        "output": "protected Package definePackage(String name, String specTitle, String specVersion, String specVendor, String implTitle, String implVersion, String implVendor, URL sealBase) throws IllegalArgumentException { synchronized (this.packageMap) { Package pkg = null;try { pkg = super.definePackage(name, specTitle, specVersion, specVendor, implTitle, implVersion, implVendor, sealBase);this.packageMap.put(name, pkg);} catch (Exception var13) { logger.error(\"程序发生异常，异常为:{}\", var13);} return pkg;} }"
+    },
+    {
+        "instruction": "用Java实现私有化方法，用于处理传入的类加载器数组，以确保唯一性并返回处理后的数组。它接收一个类加载器数组作为参数，并在内部创建一个 HashSet 和一个 ArrayList 来存储唯一的类加载器。然后，遍历传入的类加载器数组，将每个类加载器添加到 HashSet 和 ArrayList 中。最后，将 ArrayList 转换为数组并返回",
+        "input": "loader",
+        "output": "private ClassLoader[] _$625(ClassLoader[] loaders) throws IllegalArgumentException { int likelySize = loaders.length * 5 + 10;Set resultingUnique = new HashSet(likelySize);List resulting = new ArrayList(likelySize);for (int i = 0;i < loaders.length;++i) { this._$688(resultingUnique, resulting, loaders[i]);} ClassLoader[] ret = (ClassLoader[]) ((ClassLoader[]) resulting.toArray(new ClassLoader[resulting.size()]));return ret;}"
+    },
+    {
+        "instruction": "用Java实现私有化方法，用于合并已有的类加载器数组和要添加的类加载器数组，并确保返回的数组中不包含重复的类加载器。它接收两个参数：已有的类加载器数组和要添加的类加载器数组。首先，将已有的类加载器数组转换为 List，并将其添加到 HashSet 中以确保唯一性。然后，检查要添加的类加载器数组是否包含已有的所有类加载器，如果是，则直接返回已有的类加载器数组。如果不是，则将已有的类加载器数组添加到 ArrayList 中，并遍历要添加的类加载器数组，将每个类加载器添加到 HashSet 和 ArrayList 中。最后，将 ArrayList 转换为数组并返回。",
+        "input": "existing, appended",
+        "output": "private ClassLoader[] _$627(ClassLoader[] existing, ClassLoader[] appended) throws IllegalArgumentException { int likelySize = existing.length + 3;Set resultingUnique = new HashSet(likelySize);List existingL = Arrays.asList(existing);resultingUnique.addAll(existingL);if (resultingUnique.containsAll(Arrays.asList(appended))) { return existing;} else { List resulting = new ArrayList(likelySize);resulting.addAll(existingL);for (int i = 0;i < appended.length;++i) { this._$688(resultingUnique, resulting, appended[i]);} ClassLoader[] ret = (ClassLoader[]) ((ClassLoader[]) resulting.toArray(new ClassLoader[resulting.size()]));return ret;} }"
+    },
+    {
+        "instruction": "用Java实现一个受保护的最终同步方法，用于查找资源的枚举。它接收资源名称作为参数，并在内部进行一些操作，如设置加载提示、获取包名、遍历父类加载器等。根据是否应该委托给父类加载器，调用相应的方法来查找资源，并将结果合并为一个枚举返回",
+        "input": "name",
+        "output": "protected final synchronized Enumeration findResources(String name) throws IOException { this.setHint(name);int slashIdx = name.lastIndexOf(47);if (slashIdx == -1) { } String pkg = name.substring(0, slashIdx + 1);Enumeration[] es = new Enumeration[this.ClassLoaderParents.length + 1];for (int i = 0;i < this.ClassLoaderParents.length;++i) { if (!this.shouldDelegateResource(pkg, this.ClassLoaderParents[i])) { es[i] = arrayEnumeration;} else if (this.ClassLoaderParents[i] instanceof ProxyClassLoader) { es[i] = ((ProxyClassLoader) this.ClassLoaderParents[i]).simpleFindResources(name);} else { es[i] = this.ClassLoaderParents[i].getResources(name);} } es[this.ClassLoaderParents.length] = this.simpleFindResources(name);return new ProxyClassLoader.AAEnum(es);}"
+    },
+    {
+        "instruction": "用Java实现方法，用于快速获取包信息。它接收包名、类名和是否递归查找作为参数，并在内部进行一些操作，如同步块锁定、获取包、递归查找包等。根据是否需要递归以及是否在父类加载器中找到包，返回相应的结果",
+        "input": "name, sname, recurse",
+        "output": "protected Package getPackageFast(String name, String sname, boolean recurse) { synchronized (this.packageMap) { Package pkg = (Package) this.packageMap.get(name);if (pkg != null) { return pkg;} else if (!recurse) { return null;} else { for (int i = 0;i < this.ClassLoaderParents.length;++i) { ClassLoader par = this.ClassLoaderParents[i];if (par instanceof ProxyClassLoader && this.shouldDelegateResource(sname, par)) { pkg = ((ProxyClassLoader) par).getPackageFast(name, sname, false);if (pkg != null) { break;} } } if (pkg == null && this.shouldDelegateResource(sname, this.getParent())) { pkg = super.getPackage(name);} if (pkg != null) { this.packageMap.put(name, pkg);} return pkg;} } }"
+    },
+    {
+        "instruction": "用Java实现方法，用于定义包。它接收多个参数，并在内部进行一些操作，如同步块锁定、调用父类方法定义包、捕获异常等。如果定义包成功，则将包对象存储到映射中并返回；如果出现异常，则记录异常到日志中并返回 null",
+        "input": "name, specTitle, specVersion, specVendor, implTitle, implVersion, implVendor, sealBase",
+        "output": "protected Package definePackage(String name, String specTitle, String specVersion, String specVendor, String implTitle, String implVersion, String implVendor, URL sealBase) throws IllegalArgumentException { synchronized (this.packageMap) { Package pkg = null;try { pkg = super.definePackage(name, specTitle, specVersion, specVendor, implTitle, implVersion, implVendor, sealBase);this.packageMap.put(name, pkg);} catch (Exception var13) { logger.error(\"程序发生异常，异常为:{}\", var13);} return pkg;} }"
+    },
+    {
+        "instruction": "用Java实现私有的同步方法，用于获取添加的父类加载器中的所有包，并将这些包添加到当前类加载器的包映射中。它接受一个集合作为参数，表示已添加的父类加载器。在内部，它首先设置加载提示为空，并创建一个 HashMap 对象用于存储所有的包。然后，递归地获取父类加载器中的包，并将其添加到 HashMap 中。接着，移除已经存在于当前类加载器包映射中的包，并将剩余的包添加到映射中。最后，将映射中的包转换为数组并返回。",
+        "input": "addedParents",
+        "output": "private synchronized Package[] _$673(Set addedParents) { this.setHint((String) null);Map all = new HashMap();this._$676(all, super.getPackages());for (int i = 0;i < this.ClassLoaderParents.length;++i) { ClassLoader par = this.ClassLoaderParents[i];if (par instanceof ProxyClassLoader && addedParents.add(par)) { this._$676(all, ((ProxyClassLoader) par)._$673(addedParents));} } synchronized (this.packageMap) { all.keySet().removeAll(this.packageMap.keySet());this.packageMap.putAll(all);} return (Package[]) ((Package[]) this.packageMap.values().toArray(new Package[this.packageMap.size()]));}"
+    },
+
+        {
+        "instruction": "用Java实现私有方法，用于合并给定的类加载器数组，并去除重复的类加载器。它接受一个类加载器数组作为参数，并在内部进行一些操作，如计算结果集大小、创建 HashSet 和 ArrayList、遍历类加载器数组等。根据每个类加载器是否已存在于结果集中，将其添加到结果集中。最后，将结果集转换为数组并返回",
+        "input": "loader",
+        "output": "private ClassLoader[] _$625(ClassLoader[] loaders) throws IllegalArgumentException { int likelySize = loaders.length * 5 + 10;Set resultingUnique = new HashSet(likelySize);List resulting = new ArrayList(likelySize);for (int i = 0;i < loaders.length;++i) { this._$688(resultingUnique, resulting, loaders[i]);} ClassLoader[] ret = (ClassLoader[]) ((ClassLoader[]) resulting.toArray(new ClassLoader[resulting.size()]));return ret;}"
+    },
+    {
+        "instruction": "用Java实现私有方法，用于合并两个类加载器数组，并去除重复的类加载器。它接受两个类加载器数组作为参数，并在内部进行一些操作，如计算结果集大小、创建 HashSet 和 ArrayList、检查是否存在重复类加载器等。根据结果集是否包含全部已存在的类加载器，决定是否直接返回已存在的数组，或者将新的类加载器添加到结果集中，并将结果集转换为数组返回。",
+        "input": "existing, appended",
+        "output": "private ClassLoader[] _$627(ClassLoader[] existing, ClassLoader[] appended) throws IllegalArgumentException { int likelySize = existing.length + 3;Set resultingUnique = new HashSet(likelySize);List existingL = Arrays.asList(existing);resultingUnique.addAll(existingL);if (resultingUnique.containsAll(Arrays.asList(appended))) { return existing;} else { List resulting = new ArrayList(likelySize);resulting.addAll(existingL);for (int i = 0;i < appended.length;++i) { this._$688(resultingUnique, resulting, appended[i]);} ClassLoader[] ret = (ClassLoader[]) ((ClassLoader[]) resulting.toArray(new ClassLoader[resulting.size()]));return ret;} }"
+    },
+    {
+        "instruction": "用Java实现私有化方法，用于向结果集中添加类加载器，并确保不重复添加。它接受一个 HashSet 和一个 ArrayList 作为参数，用于存储结果集，以及一个待添加的类加载器。在内部，它首先检查待添加的类加载器是否等于当前类加载器，如果是则抛出异常。然后，检查结果集是否已包含该类加载器，如果没有，则将其添加到结果集中。",
+        "input": "resultingUnique, resulting, loader",
+        "output": "private void _$688(Set resultingUnique, List resulting, ClassLoader loader) throws IllegalArgumentException { if (loader == this) { throw new IllegalArgumentException(\"cycle in parents\");} else if (!resultingUnique.contains(loader)) { if (loader instanceof ProxyClassLoader && ((ProxyClassLoader) loader).isTransitive) { ClassLoader[] parents = ((ProxyClassLoader) loader).ClassLoaderParents;for (int i = 0;i < parents.length;++i) { this._$688(resultingUnique, resulting, parents[i]);} } resultingUnique.add(loader);resulting.add(loader);} }"
+    },
+    {
+        "instruction": "用Java实现私有化方法，用于根据类名、文件名和包名加载类。它首先尝试查找已加载的类，如果找到则直接返回。如果未找到，则根据包名确定类加载器的所有者，然后根据情况选择调用不同的方法加载类。如果加载成功，则更新类加载器映射并返回加载的类。",
+        "input": "name, fileName, pkg",
+        "output": "private final Class _$643(String name, String fileName, String pkg) throws ClassNotFoundException { Class c = this.findLoadedClass(name);if (c != null) { return c;} else { ClassLoader owner = this.isSpecialResource(pkg) ? null : (ClassLoader) this.ClassLoaderMap.get(pkg);if (owner == this) { return this.simpleFindClass(name, fileName, pkg);} else if (owner != null) { return owner instanceof ProxyClassLoader ? ((ProxyClassLoader) owner)._$696(name, fileName, pkg) : owner.loadClass(name);} else { c = this._$697(name, fileName, pkg);if (c != null) { ClassLoader owner2 = _$699(c);this.ClassLoaderMap.put((new String(pkg)).intern(), owner2);} return c;} } }"
+    },
+    {
+        "instruction": "用Java实现私有化方法，用于在父类加载器中查找并加载类。它接受类名、文件名和包名作为参数，并在内部进行一些操作，如遍历父类加载器数组、检查是否应该委托资源加载给父类加载器、根据情况选择调用不同的方法加载类等。根据加载的结果或异常情况，决定是否返回加载的类或继续尝试其他父类加载器。",
+        "input": "name, fileName, pkg",
+        "output": "private final Class _$697(String name, String fileName, String pkg) throws ClassNotFoundException { ClassNotFoundException cached = null;for (int i = 0;i < this.ClassLoaderParents.length;++i) { ClassLoader par = this.ClassLoaderParents[i];if (this.shouldDelegateResource(pkg, par)) { if (par instanceof ProxyClassLoader) { ProxyClassLoader pcl = (ProxyClassLoader) par;Class c = pcl._$696(name, fileName, pkg);if (c != null && (pcl.isTransitive || _$699(c) == pcl)) { return c;} } else { boolean skip = false;if ((name.startsWith(\"org.netbeans.\") || name.startsWith(\"org.openide.\") || name.endsWith(\".Bundle\") || name.endsWith(\"BeanInfo\") || name.endsWith(\"Editor\")) && par.getResource(fileName) == null) { skip = true;} if (!skip) { try { return par.loadClass(name);} catch (ClassNotFoundException var9) { cached = var9;} } } } }"
+    },
+
+        {
+        "instruction": "用Java实现受保护的方法，用于检查给定的包名是否表示特殊资源。它接受包名作为参数，并在内部进行一些操作，如检查包名是否以 \"META-INF/\" 开头或包名长度是否为 0，并根据情况返回 true 或 false。",
+        "input": "pkg",
+        "output": "protected boolean isSpecialResource(String pkg) { if (pkg.startsWith(\"META-INF/\")) { return true;} else { return pkg.length() == 0;} }"
+    },
+        {
+        "instruction": "用Java实现方法，用于处理未捕获的异常。它接受一个线程对象和一个异常对象作为参数，并在内部进行一些操作，如检查异常类型、线程名称以及记录异常到日志中等。根据异常的类型和条件判断，执行相应的处理逻辑。",
+        "input": "t, e",
+        "output": "public void uncaughtException(Thread t, Throwable e) { if (!(e instanceof ThreadDeath) && (!(e instanceof IllegalMonitorStateException) || !\"AWT-Selection\".equals(t.getName()))) { if (e instanceof VirtualMachineError) { logger.error(\"程序发生异常，异常为:{}\", e);} System.err.flush();} else { super.uncaughtException(t, e);} }}"
+    },
+        {
+        "instruction": "用Java实现静态方法，用于处理未捕获的异常。它接受一个线程对象和一个异常对象作为参数，并在内部进行一些操作，如检查异常类型、线程名称以及记录异常到日志中等。根据异常的类型和条件判断，执行相应的处理逻辑。",
+        "input": "target, name, isdaemon",
+        "output": "public static synchronized Thread startThread(Runnable target, String name, boolean isdaemon) { Thread t = new Thread(topThreadGroup, target, name);t.setContextClassLoader(classLoader);t.setDaemon(isdaemon);t.start();return t;}"
+    },
+    {
+        "instruction": "用Java实现静态方法，用于初始化主配置。它接受一个哈希表作为参数，并在内部进行一系列操作，如检查属性是否为空、从哈希表中获取特定键的值、加载配置、设置系统属性等。根据操作结果或异常情况，记录异常到日志中。",
+        "input": "hashTable",
+        "output": "public static void initMainConfig(Hashtable hashTable) { if (properties == null) { pathname = (String) hashTable.get(\"root.home\");properties = new Properties();loadConfig();try { Enumeration eu = hashTable.keys();while (eu.hasMoreElements()) { String key = (String) eu.nextElement();System.setProperty(key, (String) hashTable.get(key));} } catch (Exception var3) { logger.error(\"程序发生异常，异常为:{}\", var3);} } }"
+    },
+    {
+        "instruction": "用Java实现静态方法，用于保存配置。它在内部创建文件对象并关联文件输出流，将配置信息写入文件并指定注释，最后关闭文件输出流。根据操作结果或异常情况，记录异常到日志中。",
+        "input": "",
+        "output": "public static void saveConfig() { File file = null;try { file = new File(pathname + \"mainconfig.inf\");FileOutputStream fos = new FileOutputStream(file);properties.store(fos, \"MainConfig Ver 1.0.0 by xSkyline\");fos.flush();fos.close();} catch (Exception var2) { logger.error(\"程序发生异常，异常为:{}\", var2);} }"
+    },
+    {
+        "instruction": "用Java实现静态方法，用于加载配置。它在内部创建文件对象并检查文件是否存在，如果存在则关联文件输入流并加载配置信息，最后关闭文件输入流。根据操作结果或异常情况，记录异常到日志中。",
+        "input": "",
+        "output": "public static void loadConfig() { File file = null;try { file = new File(pathname + \"mainconfig.inf\");if (file.exists()) { FileInputStream fis = new FileInputStream(file);properties.load(fis);} } catch (Exception var2) { logger.error(\"程序发生异常，异常为:{}\", var2);} }"
+    },
+    {
+        "instruction": "用Java实现静态方法，用于将临时代码空间中的内容复制到代码空间。它接受两个参数，并在内部初始化了一些变量，如文件分隔符、代码空间路径等。然后调用 FileUtils 类的 copyDir2Dir 方法执行复制操作，并返回结果对象",
+        "input": "Codebase, hashList",
+        "output": "public static Object copyTempCodeSpace2CodeSpace(String Codebase, Hashtable hashList) throws Exception { Object res = null;String Separator = System.getProperty(\"file.separator\");String LocalCodeSpace = (String)hashList.get(\"user.home\") + CODE_SPACE + Separator;String TempLocalCodeSpace = (String)hashList.get(\"user.home\") + \"TempCodeSpace\" + Separator;FileUtils.copyDir2Dir(TempLocalCodeSpace, LocalCodeSpace);return res;}"
+    },
+    {
+        "instruction": "用Java实现静态方法，用于删除临时代码空间。它接受两个参数，并在内部初始化了文件分隔符和临时代码空间路径。然后创建了一个 File 对象表示临时代码空间的目录，并调用 FileUtils 类的 deleteDirTree 方法执行删除操作",
+        "input": "Codebase, hashList",
+        "output": "public static void deleteTempCodeSpace(String Codebase, Hashtable hashList) throws Exception { String Separator = System.getProperty(\"file.separator\");String TempLocalCodeSpace = (String)hashList.get(\"user.home\") + \"TempCodeSpace\" + Separator;File dirFile = new File(TempLocalCodeSpace);FileUtils.deleteDirTree(dirFile);}"
+    },
+    {
+        "instruction": "用Java实现静态方法，用于检查是否必须下载。它接受一个对象数组作为参数，并在内部初始化了一个布尔变量。然后检查数组是否为 null，如果不为 null，则获取数组中的元素并进行处理，最终返回一个布尔值表示是否需要下载",
+        "input": "OArray",
+        "output": "public static boolean checkMustDownload(Object[] OArray) { boolean mustDownlaod = false;if (OArray != null) { Hashtable mustDownloadList = (Hashtable)OArray[0];int NoExists = (Integer)OArray[1];if (NoExists > 0) { mustDownlaod = true;} } else { mustDownlaod = true;} return mustDownlaod;}}"
+    },
+    {
+        "instruction": "用Java实现方法，统计给定哈希表中文件对象键对应的文件不存在的数量",
+        "input": "mustList",
+        "output": "private static int _$2576(Hashtable mustList) { int Count = 0;File jarFile = null;Object[] fileArray = mustList.keySet().toArray();for(int i = 0;i < fileArray.length;++i) { jarFile = (File)fileArray[i];if (!jarFile.exists()) { ++Count;} } return Count;}"
+    },
+    {
+        "instruction": "用Java实现方法，递归检查本地更新服务，根据 XML 元素的节点名称执行不同操作，处理最底层的节点。",
+        "input": "xml, e, Codebase, mustList, key, Application, Product",
+        "output": "public static void checkLocalUpdateService(JDOMXMLBaseObject XML, Element e, String Codebase, Hashtable mustList, String key, String Application, String Product) { List nodeList = XML.BeginEnumerate(e);int Index = 0;String PathName = null;String Separator = System.getProperty(\"file.separator\");while(nodeList != null) { Element node = XML.Enumerate(nodeList, Index++);if (node == null) { break;} String nodeName = node.getName();if (\"public\".equals(nodeName) || \"client\".equals(nodeName) || \"server\".equals(nodeName) || Product.equals(nodeName) || Application.equals(nodeName)) { List childList = node.getChildren();if (childList != null && childList.size() != 0) { PathName = Codebase + node.getName() + Separator;checkLocalUpdateService(XML, node, PathName, mustList, key, Application, Product);} else { _$2589(XML, node, Codebase, mustList, key);} } } }"
+    },
+    {
+        "instruction": "用Java实现静态方法，用于解析XML节点并提取文件名信息。它接受包括XML对象、节点、代码库路径、必需列表等参数，并根据特定条件将文件名及其对应节点添加到哈希表中。",
+        "input": "XML, node, Codebase, mustList, key",
+        "output": "private static void _$2589(JDOMXMLBaseObject XML, Element node, String Codebase, Hashtable mustList, String key) { String FileName = XML.GetElementValue(node, \"href\", (String)null);if (FileName != null) { File jarFile = new File(Codebase, FileName);if (\"1\".equals(XML.GetElementValue(node, key, \"0\"))) { mustList.put(jarFile, node);} } }"
+    },
+    {
+        "instruction": "用Java实现公共静态方法，用于从给定的 UpdateStub 对象中移除特定条件下的子对象。它通过遍历根对象的子对象数组，检查每个子对象的标识符是否满足一系列条件，如果不满足，则将其移除。",
+        "input": "rootStub, Product",
+        "output": "public static void removeOProduct(UpdateStub rootStub, String Product) {StubObject[] pArray = rootStub.getChilds();for(int i = 0; i < pArray.length; ++i) {String stubID = pArray[i].getStubID();if (!\"public\".equals(stubID) && !\"client\".equals(stubID) && !\"server\".equals(stubID) && !Product.endsWith(stubID) && !\"\".equals(Product) && Product != null) {rootStub.removeChild(pArray[i]);}}}"
+    },
+    {
+        "instruction": "用Java实现公共静态方法，用于检查更新状态。它接受一系列参数，并且在执行过程中涉及到构建服务对象、构建更新对象、移除特定子对象、检查重新下载状态以及获取更新文件等操作。",
+        "input": "Codebase, hashList， Application， Product",
+        "output": "public static UpdateStub[] checkUpdateStatus(String Codebase, Hashtable hashList, String Application, String Product) throws Exception { JDOMXMLBaseObject XML = buildService(Codebase, hashList, Application, Product);UpdateStub rootUpdateStub = (UpdateStub)buildStubObject(Application, XML);remoteRootUpdateStub = rootUpdateStub;removeOProduct(rootUpdateStub, Product);REDOWNLOAD_ALL_FILE_AND_DELETEALL = checkRedownload();UpdateStub[] USA = null;USA = getUpdateFiles(rootUpdateStub);if (USA != null && USA.length == 0) { USA = null;} return USA;}"
+    },
+    {
+        "instruction": "用Java实现公共静态方法，用于加载更新中心信息。它接受一个哈希表作为输入参数，并在执行过程中涉及到从哈希表中获取代码库路径、创建并设置一个 StubObject 对象、构建 URL 对象、构建 JXMLBaseObject 对象以及加载更新中心信息等操作。",
+        "input": "hashList",
+        "output": "public static Hashtable loadUpdateCenter(Hashtable hashList) { String Codebase = (String)hashList.get(\"updateurl\");if (Codebase == null) { return UpdateCenterList;} else { StubObject SO = new StubObject();SO.setID(\"LocalNetwork\");SO.setObject(\"codebase\", Codebase);SO.setCaption(\"当前登录网络服务\");UpdateCenterList.put(SO.getID(), SO);String uri = Codebase + CODE_SPACE + \"/UpdateCenter.xml\";try { URL url = new URL(uri);JXMLBaseObject XML = new JXMLBaseObject(url);return loadUpdateCenter(XML, Codebase);} catch (Exception var6) { logger.error(\"程序发生异常，异常为:{}\", var6);return UpdateCenterList;} } }"
+    },
+    {
+        "instruction": "用Java实现公共静态方法，用于从给定的 JXMLBaseObject 对象中加载更新中心信息。它接受一个 JXMLBaseObject 对象和一个字符串作为参数，并在执行过程中涉及到获取节点列表、迭代节点列表、转换节点为 StubObject 对象以及将对象添加到更新中心列表哈希表中的操作。",
+        "input": "XML, Codebase",
+        "output": "public static Hashtable loadUpdateCenter(JXMLBaseObject XML, String Codebase) { List nodelist = null;int Index = 0;Element e = null;StubObject SO = null;nodelist = XML.BeginEnumerate(XML.Root);while(nodelist != null) { e = XML.Enumerate(nodelist, Index++);if (e == null) { break;} SO = new StubObject();SO.setObjectFromXMLElemnt(e);UpdateCenterList.put(SO.getID(), SO);} XML.EndEnumerate();return UpdateCenterList;}"
+    },
+    {
+        "instruction": "用Java实现公共静态方法，用于获取更新服务的XML字符串。它接受一系列参数，并在执行过程中涉及到检查代码库路径、根据不同情况调用私有方法获取XML字符串以及返回结果等操作。",
+        "input": "hashList, Codebase, Application, Product",
+        "output": "public static String getUpdateServiceXMLString(Hashtable hashList, String Codebase, String Application, String Product) throws Exception { String XML = null;if (!Codebase.toLowerCase().startsWith(\"http\")) { XML = _$2620(hashList, Codebase, Application, Product);} else { URL url = null;url = _$2621(hashList, Codebase);if (url != null) { XML = downloadFile(url);} } return XML;}"
+    },
+    {
+        "instruction": "用Java实现公共静态方法，用于从给定的 URL 下载文件并返回其内容的字符串表示。它接受一个 URL 对象作为参数，并在执行过程中涉及到设置请求属性、获取输入流、读取文件内容以及关闭连接等操作。",
+        "input": "url",
+        "output": "public static String downloadFile(URL url) throws IOException { String XML = \"\";HttpURLConnection urlc = (HttpURLConnection)url.openConnection();try { urlc.setRequestProperty(\"WebLogin\", \"no\");InputStream is = urlc.getInputStream();byte[] copy = new byte[MAX_FILE_LENGTH];int i = 0;while(true) { if (i < MAX_FILE_LENGTH) { int read = is.read();if (read != -1) { copy[i] = (byte)read;++i;continue;} } byte[] content = new byte[i];System.arraycopy(copy, 0, content, 0, i);XML = new String(content, \"utf8\");is.close();return XML;} } finally { urlc.disconnect();} }"
+    },
+    {
+        "instruction": "用Java实现私有静态方法，用于构建一个本地文件路径对应的 XML 字符串。它接受一系列参数，并在执行过程中涉及到构建文件路径的 URI 字符串、创建 URL 对象、构建 JDOMXMLBaseObject 对象、构建更新服务以及获取根节点的 XML 字符串等操作",
+        "input": "hashList, Codebase, Application, Product",
+        "output": "private static String _$2620(Hashtable hashList, String Codebase, String Application, String Product) throws Exception {String XML = null;String uri = \"file:///\" + Codebase + Application + \".xml\";URL url = new URL(uri);JDOMXMLBaseObject XMLObject = new JDOMXMLBaseObject(url);buildUpdateService(XMLObject, XMLObject.Root, true, Codebase, Application, Product);XML = XMLObject.GetRootXMLString();return XML;}"
+    },
+    {
+        "instruction": "用Java实现私有静态方法，用于构建一个 URL 对象。它接受一个哈希表和一个代码库路径作为参数，并在执行过程中涉及到构建 URI 字符串、创建 URL 对象以及处理异常等操作。",
+        "input": "hashList, Codebase",
+        "output": "private static URL _$2621(Hashtable hashList, String Codebase) { String uri = _$2630(hashList, Codebase);URL url = null;try { url = new URL(uri);} catch (Exception var5) { logger.error(\"程序发生异常，异常为:{}\", var5);} return url;}"
+    },
+    {
+        "instruction": "用Java实现私有静态方法，用于构建一个 URI 字符串。它接受一个哈希表和一个代码库路径作为参数，并在执行过程中涉及到获取系统属性、获取哈希表中的值、拼接字符串等操作，最后返回构建好的 URI 字符串",
+        "input": "hashList, Codebase",
+        "output": "private static String _$2630(Hashtable hashList, String Codebase) { String uri = null;String isApplet = System.getProperty(\"isapplet\", \"0\");uri = Codebase + \"UpdateService?application=\" + (String)hashList.get(\"application\");uri = uri + \"&product=\" + (String)hashList.get(\"product\") + \"&applet=\" + isApplet;return uri;}"
+    },
+    {
+        "instruction": "用Java实现公共静态方法，用于构建更新服务的 XML 对象。它接受一系列参数，并在执行过程中涉及到获取系统属性、构建本地路径、构建文件对象、创建 XML 对象以及构建更新服务等操作，最后返回构建好的 XML 对象。",
+        "input": "Localhome, Application, Product, isRemote, isApplet",
+        "output": "public static JDOMXMLBaseObject buildUpdateService(String Localhome, String Application, String Product, boolean isRemote, boolean isApplet) { String Separator = System.getProperty(\"file.separator\"); String PathName = Localhome + CODE_SPACE + Separator;String FileName = null;if (isApplet) { FileName = Application + \"_Applet.xml\";} else { FileName = Application + \".xml\";} File xmlFile = new File(PathName + FileName);JDOMXMLBaseObject XML = new JDOMXMLBaseObject(xmlFile);buildUpdateService(XML, XML.Root, isRemote, PathName, Application, Product);return XML;}"
+    },
+    {
+        "instruction": "用Java实现公共静态方法，用于构建更新服务。它接受一个 JDOMXMLBaseObject 对象、一个 XML 元素、一个布尔值表示是否远程、一个代码库路径、一个应用程序名称和一个产品名称作为参数，并在执行过程中涉及到枚举子元素、递归处理子元素、处理当前元素等操作。",
+        "input": "XML, e, isRemote, Codebase, Application, Product",
+        "output": "public static void buildUpdateService(JDOMXMLBaseObject XML, Element e, boolean isRemote, String Codebase, String Application, String Product) { List nodeList = XML.BeginEnumerate(e);int Index = 0;String PathName = null;String Separator = System.getProperty(\"file.separator\");while(nodeList != null) { Element node = XML.Enumerate(nodeList, Index++);if (node == null) { break;} List childList = node.getChildren();if (childList != null && childList.size() != 0) { PathName = Codebase + node.getName() + Separator;if (!isRemote) { _$2635(PathName);} buildUpdateService(XML, node, isRemote, PathName, Application, Product);} else { _$2634(XML, node, isRemote, Codebase);} } }"
+    },
+    {
+        "instruction": "用Java实现公共静态方法，用于构建服务。它接受一系列参数，并在执行过程中涉及到获取更新服务的 XML 字符串、构建 XML 对象、获取用户主目录、构建本地路径以及构建更新服务等操作，最后返回构建好的 XML 对象。",
+        "input": "Codebase, hashList， Application， Product",
+        "output": "public static JDOMXMLBaseObject buildService(String Codebase, Hashtable hashList, String Application, String Product) throws Exception { String xml = getUpdateServiceXMLString(hashList, Codebase, Application, Product);JDOMXMLBaseObject XML = new JDOMXMLBaseObject(xml);String PathName = (String)hashList.get(\"user.home\");String Separator = System.getProperty(\"file.separator\");PathName = PathName + CODE_SPACE + Separator;buildUpdateService(XML, PathName, Application, Product);return XML;}"
+    },
+    {
+        "instruction": "用Java实现公共静态方法，用于获取更新文件的更新存根数组。它接受一个更新存根对象作为参数，并在执行过程中涉及到初始化数组和向量、遍历更新存根对象、将更新存根添加到向量中以及将向量转换为数组等操作，最后返回更新存根数组。",
+        "input": "US",
+        "output": "public static UpdateStub[] getUpdateFiles(UpdateStub US) { UpdateStub[] USA = null;Vector stubList = new Vector();_$2649(US, stubList);USA = new UpdateStub[stubList.size()];USA = (UpdateStub[])((UpdateStub[])stubList.toArray(USA));return USA;}}"
+    },
+    {
+        "instruction": "用Java实现私有静态方法，用于递归遍历更新存根对象并将选中的文件存根添加到给定的向量中。它接受一个更新存根对象和一个存储更新存根的向量作为参数，并在执行过程中涉及到判断对象类型、递归调用自身等操作",
+        "input": "US, stubList",
+        "output": "private static void _$2649(UpdateStub US, Vector stubList) { if (US.isFile()) { if (US.isSelected()) { stubList.add(US);} } else if (US.hasChild()) { StubObject[] USA = (StubObject[])US.getChilds();for(int i = 0;i < USA.length;++i) { _$2649((UpdateStub)USA[i], stubList);} } }"
+    },
+    {
+        "instruction": "用Java实现方法，用于判断对象是否应被删除。它获取对象的远程时间信息，将其转换为长整型，然后返回远程时间是否为零的结果",
+        "input": "",
+        "output": "public boolean isDelete() { String RemoteTime = this.getRemoteTime();long lRemoteTime = Long.parseLong(RemoteTime);return lRemoteTime == 0L;}"
+    },
+    {
+        "instruction": "用Java实现方法，用于判断对象是否已经发生变化。它获取对象的远程时间和大小信息，以及本地时间和大小信息，然后计算远程时间与本地时间的差值的绝对值是否大于 5000 毫秒，如果大于则返回 true，否则返回 false。",
+        "input": "",
+        "output": "public boolean isChanged() { String RemoteTime = this.getRemoteTime();String RemoteSize = this.getRemoteSize();String LocalTime = this.getLocalTime();if (LocalTime == null || \"\".equals(LocalTime.trim())) { LocalTime = \"0\";} String LocalSize = this.getLocalSize();long lRemoteTime = Long.parseLong(RemoteTime);long lLocalTime = Long.parseLong(LocalTime);return Math.abs(lRemoteTime - lLocalTime) > 5000L;}"
+    },
+    {
+        "instruction": "用Java实现方法，用于判断对象是否被选中。它首先初始化一个布尔值变量为 false，然后根据对象是否有子对象进行不同的判断处理，最终返回判断结果。",
+        "input": "",
+        "output": "public boolean isSelected() { boolean res = false;if (!this.hasChild()) { res = this.isChanged() && super.isSelected(true) || UpdateObject.REDOWNLOAD_ALL_FILE_AND_DELETEALL;} else { StubObject[] SOA = this.getChilds();for(int i = 0;i < SOA.length;++i) { res = SOA[i].isSelected();if (res) { break;} } } return res;}"
+    },
+    {
+        "instruction": "用Java实现方法，用于设置对象的选中状态。它根据对象是否发生变化来确定最终的选中状态，并调用父类的方法来设置选中状态",
+        "input": "",
+        "output": "public void setSelected(boolean v) { if (!this.isChanged()) { super.setSelected(false);} else { super.setSelected(v);} }"
+    },
+    {
+        "instruction": "用Java实现方法，用于返回对象的字符串表示形式。它根据对象的属性和全局标志来设置额外的提示信息，最终返回组合好的字符串表示形式。",
+        "input": "",
+        "output": "public String toString() { String cap = super.toString();String EM = this.getString(\"ERROR_MESSAGE\", (String)null);if (EM != null) { EM = \"-错误信息:\" + EM;} else { EM = \"\";} if (!this.isChanged() && !UpdateObject.REDOWNLOAD_ALL_FILE_AND_DELETEALL) { if (this.isFile()) { cap = cap + \"（没有新版本无需下载）\";} } else { String sl = this.getRemoteSize();int L = Integer.parseInt(sl);if (L != 0) { L /= 1024;cap = cap + \"（]\" + L + \"kb）\";} } return cap + EM;}"
+    },
+    {
+        "instruction": "用Java实现方法，用于根据给定的布尔值参数获取存根的路径名。它遍历存根节点，并根据是否远程路径确定分隔符，最终返回路径名字符串",
+        "input": "isRemote",
+        "output": "public String getStubPathName(boolean isRemote) { String PathName = \"\";ArrayList NodeArray = new ArrayList();String Separator = isRemote ? \"/\" : System.getProperty(\"file.separator\");this._$2334(NodeArray, this);for(int i = NodeArray.size() - 1;i >= 0;--i) { PathName = PathName + NodeArray.get(i).toString() + Separator;} return PathName;}"
+    },
+    {
+        "instruction": "用Java实现私有方法，用于递归地构建存根对象的路径列表。它接受一个路径列表和一个存根对象作为参数，并在执行过程中涉及到检查对象是否为空、获取对象的 ID、添加 ID 到路径列表以及递归调用自身来处理父对象等操作。",
+        "input": "pathList, SO",
+        "output": "private void _$2334(ArrayList pathList, StubObject SO) { StubObject parentSO = null;if (SO != null) { if (SO.hasChild()) { String Name = SO.getStubID();pathList.add(Name);} parentSO = SO.getParent();this._$2334(pathList, parentSO);} }"
+    },
+    {
+        "instruction": "用Java实现方法，用于获取指定文件的 MD5 哈希值，输入为一个文件对象，输出为一个字符串，算法逻辑包括使用 MD5 消息摘要实例、读取文件内容到缓冲区并更新摘要、最终计算摘要值并转换为十六进制字符串。",
+        "input": "file",
+        "output": "public static String getMD5(File file) { FileInputStream fis = null;try { MessageDigest md = MessageDigest.getInstance(\"MD5\");fis = new FileInputStream(file);FileChannel fChannel = fis.getChannel()ByteBuffer buffer = ByteBuffer.allocateDirect(1024 * 1024);while (fChannel.read(buffer) != -1) { buffer.flip();md.update(buffer);buffer.compact();} byte[] b = md.digest();return byteToHexString(b);} catch (Exception ex) { logger.error(\"程序发生异常，异常为:{}\", ex);return null;} finally { try { fis.close();} catch (IOException ex) { logger.error(\"程序发生异常，异常为:{}\", ex);} } }"
+    },
+    {
+        "instruction": "用Java实现方法，获取给定字节数组的 MD5 哈希值，输入为一个字节数组，输出为一个字符串，算法逻辑包括使用 MD5 消息摘要实例、更新摘要以处理输入字节数组、计算最终摘要值并转换为十六进制字符串",
+        "input": "fileBytes",
+        "output": "public static String getMD5(byte[] fileBytes) { try { MessageDigest md = MessageDigest.getInstance(\"MD5\");md.update(fileBytes);return byteToHexString(md.digest());} catch (NoSuchAlgorithmException e) { logger.error(e.getMessage(),e);return null;} }"
+    },
+    {
+        "instruction": "用Java实现方法，用于获取给定字符串的 MD5 哈希值，输入为一个字符串，输出为一个字符串，算法逻辑包括检查输入字符串是否为 null，将字符串转换为字节数组，并调用另一个方法计算 MD5 哈希值。",
+        "input": "source",
+        "output": " public static String getMD5(String source) {if (source == null) return null;return getMD5(source.getBytes());}"
+    },
+    {
+        "instruction": "用Java实现方法，用于获取给定输入流内容的 MD5 哈希值，输入为一个输入流对象，输出为一个字符串，算法逻辑包括使用 MD5 消息摘要实例、循环读取输入流内容并更新摘要、计算最终摘要值并转换为十六进制字符串。",
+        "input": "inStream",
+        "output": "public static String inputStream2MD5(InputStream inStream) { try { MessageDigest md = MessageDigest.getInstance(\"MD5\");byte[] buffer = new byte[512 * 1024];int length = -1;while ((length = inStream.read(buffer)) != -1) { md.update(buffer, 0, length);} byte[] b = md.digest();return byteToHexString(b);} catch (Exception ex) { logger.error(\"程序发生异常，异常为:{}\", ex);return null;} }"
+    },
+    {
+        "instruction": "用Java实现方法，用于将给定的字节数组转换为对应的十六进制字符串表示，输入为一个字节数组，输出为一个字符串，算法逻辑包括遍历字节数组并将每个字节转换为对应的十六进制字符，最终将字符数组转换为字符串。",
+        "input": "tmp",
+        "output": "public static String byteToHexString(byte[] tmp) { String s;char str[] = new char[16 * 2];int k = 0;for (int i = 0;i < 16;i++) { byte byte0 = tmp[i];str[k++] = hexdigits[byte0 >>> 4 & 0xf];, str[k++] = hexdigits[byte0 & 0xf];} s = new String(str);return s;}"
+    },
+    {
+        "instruction": "用Java实现方法，用于从字典数据缓存中获取指定类型和条件的数据集，输入包括 JParamObject 对象、数据集类型标识、查询条件和主键字段，输出为一个 EFDataSet 对象，算法逻辑包括查询缓存中是否存在指定数据集，如果不存在则查询数据库并存入缓存。",
+        "input": "PO,dctid,where,key",
+        "output": "public static EFDataSet getWholeData(JParamObject PO,String dctid,String where,String key){ String typekey=dctid;if(where==null)where=\"1=1\";if(!DictDataBuffer.getDefault(PO).hasData(dctid,where)){ EFDataSet eds = DictDataBuffer.getDefault(PO).QueryData(PO, dctid, null, where);if (eds != null) if (key != null) { String[]keys=key.split(\",\");EFDataSet newds=EFDataSet.getInstance(dctid);newds.setPrimeKey(keys);for(int i=0;i<eds.getRowCount();i++) newds.addRowSet(eds.getRowSet(i));eds=newds;} DictDataBuffer.getDefault(PO).addDataItem(typekey, where, eds);} return (EFDataSet) DictDataBuffer.getDefault(PO).getDataItem(typekey,where);}"
+    },
+    {
+        "instruction": "用Java实现方法，用于从整体数据集中获取指定类型和主键值对应的数据行，输入包括 JParamObject 对象、数据集类型标识、主键字段和主键值，输出为一个 EFRowSet 对象，算法逻辑包括查询缓存中是否存在指定数据集，如果不存在则查询数据库并存入缓存，并从缓存中获取对应的数据行。",
+        "input": "PO,dctid,where,key",
+        "output": "public static EFRowSet getDataInWholeData(JParamObject PO,String dctid,String keycol,String key){ if(!DictDataBuffer.getDefault(PO).hasData(dctid,keycol)){ EFDataSet eds=DictDataBuffer.getDefault(PO).QueryData(PO,dctid,keycol.split(\",\"),null);if(eds!=null) DictDataBuffer.getDefault(PO).addDataItem(dctid,keycol,eds);} EFDataSet eds=(EFDataSet)DictDataBuffer.getDefault(PO).getDataItem(dctid,keycol);if(eds==null)return EFRowSet.getInstance();String[]keys=key.split(\",\");return (EFRowSet) eds.getRowSet(keys);}"
+    },
+    {
+        "instruction": "用Java实现方法，用于根据权限设置判断用户是否具有对指定数据表的操作权限，输入包括 JParamObject 对象、数据表名称、数据记录标识号和权限操作类型，输出为一个布尔值，算法逻辑包括获取权限设置数据、根据权限设置判断用户是否具有操作权限。",
+        "input": "PO,table,sjbh,bzw",
+        "output": "public static boolean hasGrantWithDict(JParamObject PO,String table,String sjbh,String bzw){ EFRowSet gran=getDataInWholeData(PO,\"BSGRAN\",\"F_TABN\",table);if(gran==null)return true;EFRowSet so = DictDataBuffer.getDefault(PO).getDictDataItem(table, sjbh);if (gran.getString(\"F_SFSY\",\"\").equals(\"0\")) return true;else if (gran.getString(\"F_SFSY\", \"\").equals(\"1\")) { so = DictDataBuffer.getDefault(PO).getDictDataItem(table, sjbh);if (so == null) return false;} else { try { boolean b = EAISecurityService.getDefault().getAccessController1( gran. getString(\"F_QXBH\", \"\"), sjbh, Integer.parseInt(bzw));return b;} catch (Exception ex) { logger.error(\"程序发生异常，异常为:{}\", ex);return false;} } boolean b = \"1\".equals(so.getString(\"F_G\" + bzw, \"0\"));return b;}"
+    },
+    {
+        "instruction": "用Java实现方法,用于向数据映射中添加或更新数据，输入包括键和数据对象，算法逻辑包括初始化数据映射、将数据序列化后存入映射或从映射中移除数据。",
+        "input": "key,data",
+        "output": "public void addData(Object key, Object data) { initDataMap();if (data != null) { dataMap.put(key, SerializeUtil.serialize(data));} else { dataMap.remove(key);} }"
+    },
+    {
+        "instruction": "用Java实现方法用于从数据映射中移除指定键对应的数据，输入是一个键值 key，算法逻辑包括检查数据映射是否为空、处理特殊情况下的键值以及从数据映射中移除指定的键值对",
+        "input": "key",
+        "output": "public void removeData(Object key) { if (dataMap != null) { if (key != null && key instanceof String) { String keyString = (String) key;dealWithKeyRemoveMatchData(keyString);} dataMap.remove(key);} }"
+    },
+    {
+        "instruction": "用Java实现私有方法用于处理以 * 结尾的键值，以支持移除指定前缀匹配的缓存内容，输入是一个字符串键值 key，算法逻辑包括检查键值是否以 * 结尾、获取前缀部分并调用其他方法进行处理。",
+        "input": "key",
+        "output": "private void dealWithKeyRemoveMatchData(String key) { boolean isMatch = key.endsWith(\"*\");if (isMatch) { String[] keys = key.split(\"\\*\");if (keys != null) { removeMatchData(keys[0]);} } }"
+    },
+    {
+        "instruction": "用Java实现方法用于移除数据映射中匹配指定前缀的键值对应的数据，输入是一个键值 key，算法逻辑包括检查数据映射是否为空、遍历数据映射并判断是否匹配指定前缀，如果匹配则移除对应的键值对。",
+        "input": "key",
+        "output": "public void removeMatchData(Object key) { if (dataMap != null) { for (Object dataKey: dataMap.keySet()) { if (dataKey instanceof String && key != null && key instanceof String) { boolean isMatch = ((String) dataKey).startsWith((String)key);if (isMatch) { dataMap.remove(dataKey);} } } } }"
+    },
+    {
+        "instruction": "用Java实现方法用于从数据映射中获取指定键对应的数据对象，输入是一个键值 key，输出是一个数据对象，算法逻辑包括检查键值和数据映射是否为空、获取对应键值的数据字节数组并进行反序列化。",
+        "input": "key",
+        "output": "public Object getData(Object key) { if (key !=null && dataMap != null) { byte[] objBytes = (byte[])dataMap.get(key);if ( objBytes != null ) { logger.debug(\"read data from jvm databuffer, key = {}, value size = {}\", key, objBytes.length);return SerializeUtil.unserialize(objBytes);} } return null;}"
+    },
+    {
+        "instruction": "用Java实现方法用于获取数据映射中所有的键值，返回一个包含所有键值的字符串数组，算法逻辑包括检查数据映射是否为空、获取数据映射中的所有键值并转换为字符串数组。",
+        "input": "",
+        "output": "public String[] getDataKey() { if (dataMap == null) return null;Object[] arr = dataMap.keySet().toArray();if (arr == null) return null;String[] str = new String[arr.length];System.arraycopy(arr, 0, str, 0, str.length);return str;}"
+    },
+    {
+        "instruction": "用Java实现方法用于检查数据映射中是否存在指定的键值，输入是一个键值 key，输出是一个布尔值，算法逻辑包括检查数据映射是否为空，并调用方法检查是否包含指定的键值。",
+        "input": "key",
+        "output": "public boolean exists(Object key) { if (dataMap != null) { return dataMap.containsKey(key);} return false;}"
+    },
+    {
+        "instruction": "用Java实现用于根据给定的键创建一个 DataBufferManager 对象，并根据参数指定是否使用内存数据库，输入包括一个键和一个布尔值，输出为创建的 DataBufferManager 对象，算法逻辑包括根据键创建 DataBufferManager 对象、判断是否使用内存数据库并将对象放入内存映射中。",
+        "input": "key, memdbm",
+        "output": "public static DataBufferManager createDataBufferManager(Object key, boolean memdbm) { Object uniKey = null;if (key instanceof ChildLinkParentKey) { uniKey = ((ChildLinkParentKey) key).getMasterKey();} if (uniKey == null) { uniKey = key;} DataBufferManager dbm = new DataBufferManager(uniKey);pubMemMap(key, dbm, memdbm);return dbm;}"
+    },
+    {
+        "instruction": "用Java实现静态同步方法，用于获取指定键对应的 DataBufferManager 对象。它首先检查数据映射是否为空，然后根据输入键找到对应的唯一键，最后从数据映射中获取并返回对应的 DataBufferManager 对象。",
+        "input": "key",
+        "output": "public synchronized static DataBufferManager getDataBufferManager(Object key) { if (dataBufferManagerMap == null) { return null;} Object uniKey = null;if (key instanceof ChildLinkParentKey) { uniKey = ((ChildLinkParentKey) key).getMasterKey();} if (uniKey == null) { uniKey = key;} return (DataBufferManager) dataBufferManagerMap.get(uniKey);}"
+    },
+    {
+        "instruction": "用Java实现静态同步方法，用于移除指定键对应的 DataBufferManager 对象，并清空其所有数据缓存。它首先检查数据映射是否为空，然后根据输入键找到对应的唯一键。接着从数据映射中移除对应的 DataBufferManager 对象，并清空其所有数据缓存，最后返回被移除的 DataBufferManager 对象。",
+        "input": "key",
+        "output": "public synchronized static DataBufferManager removeDataBufferManager(Object key) { if (dataBufferManagerMap == null) { return null;} Object uniKey = null;if (key instanceof ChildLinkParentKey) { uniKey = ((ChildLinkParentKey) key).getMasterKey();} if (uniKey == null) { uniKey = key;} DataBufferManager dbm = (DataBufferManager) dataBufferManagerMap.remove(uniKey);dbm.removeAllDataBuffer();return dbm;}"
+    },
+    {
+        "instruction": "用Java实现受保护的静态同步方法，用于将 DataBufferManager 对象添加到内存映射中。它首先检查是否启用内存数据库，如果不启用，则直接返回。然后初始化数据映射（如果尚未初始化），根据输入键找到对应的唯一键，最后将键值对添加到内存映射中。",
+        "input": "key,dbm,memdbm",
+        "output": "protected synchronized static void pubMemMap(Object key, DataBufferManager dbm, boolean memdbm) { if (!memdbm || !rememberDBM) { return;} if (dataBufferManagerMap == null) { dataBufferManagerMap = new HashMap<Object, DataBufferManager>();} Object uniKey = null;if (key instanceof ChildLinkParentKey) { uniKey = ((ChildLinkParentKey) key).getMasterKey();} if (uniKey == null) { uniKey = key;} dataBufferManagerMap.put(uniKey, dbm);}"
+    },
+    {
+        "instruction": "用Java实现静态同步方法，用于将 DataBufferManager 对象添加或更新到内存映射中。它首先初始化数据映射（如果尚未初始化），然后根据输入键找到对应的唯一键，最后将键值对添加或更新到内存映射中",
+        "input": "key,dbm",
+        "output": "public synchronized static void putDataBufferManager(Object key, DataBufferManager dbm) { if (dataBufferManagerMap == null) { dataBufferManagerMap = new HashMap<Object, DataBufferManager>();} Object uniKey = null;if (key instanceof ChildLinkParentKey) { uniKey = ((ChildLinkParentKey) key).getMasterKey();} if (uniKey == null) { uniKey = key;} dataBufferManagerMap.put(uniKey, dbm);}"
+    },
+    {
+        "instruction": "用Java实现方法用于根据给定的键值创建一个新的 DataBuffer 对象，使用 SPI 机制加载具体的 DataBuffer 实现类，设置键值，并添加到数据缓冲区列表中，最后返回创建的 DataBuffer 对象。",
+        "input": "key",
+        "output": "public DataBuffer createDataBuffer(Object key) { DataBuffer dataBuffer = (DataBuffer) SpiLoader.load(IDataBuffer.class, \"stubbuffer\",false);dataBuffer.setDataBufferKey(key);addDataBufer(key, dataBuffer);return dataBuffer;}"
+    },
+    {
+        "instruction": "用Java实现静态方法用于创建一个默认的 DataBuffer 对象，通过 SPI 机制加载默认的 DataBuffer 实现类，设置键值，并返回创建的 DataBuffer 对象。",
+        "input": "key",
+        "output": "public static DataBuffer createDefaultDataBuffer(String key) {DataBuffer dataBuffer = (DataBuffer) SpiLoader.load(IDataBuffer.class, \"stubbuffer\");dataBuffer.setDataBufferKey(key);return dataBuffer;}"
+    },
+    {
+        "instruction": "用Java实现方法用于创建一个使用 Redis 缓存的 DataBuffer 对象，通过 SPI 机制加载具体的 DataBuffer 实现类，设置键值，并添加到数据缓冲区列表中，最后返回创建的 DataBuffer 对象。",
+        "input": "key",
+        "output": "public DataBuffer createRedisCached(String key) { DataBuffer dataBuffer = (DataBuffer) SpiLoader.load(IDataBuffer.class, \"redisbuffer\",false);dataBuffer.setDataBufferKey(key);addDataBufer(key, dataBuffer);return dataBuffer;}"
+    },
+    {
+        "instruction": "用Java实现静态方法用于创建一个使用 Redis 数据库的 DataBuffer 对象，通过 SPI 机制加载具体的 DataBuffer 实现类，设置键值，并返回创建的 DataBuffer 对象",
+        "input": "key",
+        "output": "public static DataBuffer createRedisDataBuffer(String key) { DataBuffer dataBuffer = (DataBuffer) SpiLoader.load(IDataBuffer.class, \"redisbuffer\",false);dataBuffer.setDataBufferKey(key);return dataBuffer;}"
+    },
+    {
+        "instruction": "用Java实现方法用于创建一个使用 J2 缓存的 DataBuffer 对象，通过 SPI 机制加载具体的 DataBuffer 实现类，设置键值，并添加到数据缓冲区列表中，最后返回创建的 DataBuffer 对象",
+        "input": "key",
+        "output": "public DataBuffer createJ2CachedBuffer(String key) { DataBuffer dataBuffer = (DataBuffer) SpiLoader.load(IDataBuffer.class, \"j2buffer\",false);dataBuffer.setDataBufferKey(key);addDataBufer(key, dataBuffer);return dataBuffer;}"
+    },
+    {
+        "instruction": "用Java实现静态方法用于创建一个使用 J2 缓存的 DataBuffer 对象，通过 SPI 机制加载具体的 DataBuffer 实现类，设置键值，并返回创建的 DataBuffer 对象。",
+        "input": "key",
+        "output": "public static DataBuffer createJ2CacheDataBuffer(String key) {DataBuffer dataBuffer = (DataBuffer) SpiLoader.load(IDataBuffer.class, \"j2buffer\");dataBuffer.setDataBufferKey(key);return dataBuffer;}"
+    },
+    {
+        "instruction": "用Java实现静态方法用于创建一个使用内存缓存的 DataBuffer 对象，通过 SPI 机制加载具体的 DataBuffer 实现类，设置键值，并返回创建的 DataBuffer 对象。",
+        "input": "key",
+        "output": " public static DataBuffer createMemCacheDataBuffer(String key) {DataBuffer dataBuffer = (DataBuffer) SpiLoader.load(IDataBuffer.class, \"membuffer\");dataBuffer.setDataBufferKey(key);return dataBuffer;}"
+    },
+    {
+        "instruction": "用Java实现方法用于将 DataBuffer 对象添加到数据缓冲区映射中。它首先检查数据缓冲区映射是否为空，然后将键值对添加到映射中",
+        "input": "key,dataBuffer",
+        "output": "public void addDataBufer(Object key, DataBuffer dataBuffer) {if (dataBufferMap == null) {dataBufferMap = new HashMap<Object, DataBuffer>();}dataBufferMap.put(key, dataBuffer);}"
+    },
+    {
+        "instruction": "用Java实现方法用于移除数据缓冲区映射中指定键对应的 DataBuffer 对象，并清空该 DataBuffer 对象中的所有数据。它首先检查输入的键值是否为 null，然后根据键值获取对应的 DataBuffer 对象并清空其数据，最后从数据缓冲区映射中移除指定键值对。",
+        "input": "key",
+        "output": "public void removeDataBuffer(Object key) { if (key == null) return;if (dataBufferMap != null) { DataBuffer db = getDataBuffer(key);if (db != null) { db.clearAll();} dataBufferMap.remove(key);} }"
+    },
+    {
+        "instruction": "用Java实现方法用于检查数据缓冲区映射中是否存在指定键对应的 DataBuffer 对象。它首先检查数据缓冲区映射是否为空，然后检查是否包含指定键值对。",
+        "input": "key",
+        "output": " public boolean existDataBuffer(Object key) {if (dataBufferMap == null) {return false;}return dataBufferMap.containsKey(key);}"
+    },
+    {
+        "instruction": "用Java实现方法用于从数据缓冲区映射中获取指定键对应的 DataBuffer 对象。它首先检查数据缓冲区映射是否为空，然后通过键值获取对应的 DataBuffer 对象并返回。",
+        "input": "key",
+        "output": "public DataBuffer getDataBuffer(Object key) {if (dataBufferMap != null) {return (DataBuffer) dataBufferMap.get(key);}return null;}"
+    },
+    {
+        "instruction": "用Java实现方法用于构建 ResultSet 对象的键值，基于给定的字段名数组。它遍历字段名数组，对于每个字段，从 ResultSet 对象中获取对应的值，并拼接成键值对，最后返回构建好的键值。",
+        "input": "re,KeyField",
+        "output": "protected static String buildeResultSetKey(ResultSet rs,String[] KeyField) throws Exception { String Key = \"\",Field,Value;for(int i=0;i<KeyField.length;i++) { Field = KeyField[i];if ( Field == null ) continue;Value = rs.getString(Field);if ( Value != null ) Value = Value.trim();if ( Value != null && !\"\".equals(Value) ) { Key += Field+\"=\"+Value + \" \";} } return Key.trim();}"
+    },
+    {
+        "instruction": "用Java实现静态方法用于获取默认的 DictDataBuffer 对象，首先检查输入的参数对象是否为 null，然后根据参数对象获取键值，并从数据缓冲区映射中获取对应的 DictDataBuffer 对象。如果该对象不存在，则创建一个新的对象并添加到映射中，并且如果存在相关的数据缓冲区管理器，则将其添加到数据缓冲区管理器中，最后返回获取或创建的 DictDataBuffer 对象。",
+        "input": "PO",
+        "output": "public static DictDataBuffer getDefault(JParamObject PO) { if(PO==null)PO=JParamObject.Create();String key=DictDataBuffer.getKey(PO);DictDataBuffer ddb=(DictDataBuffer) dbf.get(key);if (ddb == null){ ddb = new DictDataBuffer(PO);dbf.put(key,ddb);} if(DataBufferManager.getDataBufferManager(key)==null&&ddb.dbm!=null){ DataBufferManager.pubMemMap(key,ddb.dbm,true);} return ddb;}"
+    },
+    {
+        "instruction": "用Java实现方法用于检查指定的数据缓冲区中是否包含指定键值的数据项。它首先调用 getDataItem 方法获取指定键值的数据项，并根据返回结果判断数据项是否存在，存在则返回 true，不存在则返回 false",
+        "input": "bkey,key",
+        "output": "public boolean hasData(String bkey,String key){Object o=getDataItem(bkey,key);return o!=null;}"
+    },
+    {
+        "instruction": "用Java实现方法用于向字典数据映射中添加数据项。它遍历输入的数据映射中的所有键值对，将每个键值对作为数据项添加到字典数据缓冲区中",
+        "input": "typeKey, map",
+        "output": "public void addDictDataMap(String typekey,Map map){ String key;Iterator it=map.keySet().iterator();while(it.hasNext()){ key=(String)it.next();StubObject so=(StubObject)map.get(key);addDataItem(typekey,key,so);} }"
+    },
+    {
+        "instruction": "用Java实现方法用于向数据缓冲区中添加数据项。它首先从数据缓冲区管理器中获取指定类型键对应的数据缓冲区对象，如果不存在则创建一个新的数据缓冲区对象，并将数据项添加到该对象中。",
+        "input": "buftpyekey, key, dataso",
+        "output": "public void addDataItem(String buftypekey, String key, Object dataso) { DataBuffer db = dbm.getDataBuffer(buftypekey);if (db == null){ db = dbm.createDataBuffer(buftypekey);} db.addData(key, dataso);}"
+    },
+    {
+        "instruction": "用Java实现方法用于从数据缓冲区中获取指定键对应的数据项。它首先从数据缓冲区管理器中获取指定类型键对应的数据缓冲区对象，如果不存在则直接返回 null；否则从该对象中获取指定键对应的数据项并返回",
+        "input": "buftpyekey, key"  ,
+        "output": "public Object getDataItem(String buftypekey, String key) { DataBuffer db = dbm.getDataBuffer(buftypekey);if (db == null) return null;return db.getData(key);}"
+    },
+    {
+        "instruction": "用Java实现方法用于从服务器获取字典数据项。它首先调用 MDMDataUtil 类的 getMainDctData 方法从服务器获取指定类型键对应的字典数据集，然后根据指定键从中获取对应的行集。如果在服务器上找到对应的行集，则直接返回；否则调用 getDictDataItem2 方法从本地数据缓冲区中获取。",
+        "input": "PO,typekey,key,bload",
+        "output": "public EFRowSet getDictDataItemByServer(JParamObject PO,String typekey, String key, boolean bload) { EFDataSet eds = (EFDataSet)MDMDataUtil.getMainDctData(PO,typekey,bload);if (eds != null) { EFRowSet row = (EFRowSet) eds.getRowSet(key.split(\",\"));if (row == null) return getDictDataItem2(typekey, key);return row;} return EFRowSet.getInstance();}"
+    }
+   
+]

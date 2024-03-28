@@ -1,0 +1,486 @@
+[
+    {
+        "prompt": "在osp开发平台中，有modelContainer组件，实现MC中设置值功能",
+        "response": "modelContainer.setValue(key, value);"
+    },
+    {
+        "prompt": "在osp开发平台中，有modelContainer组件，实现MC中获取值功能",
+        "response": "modelContainer.getValue();"
+    },
+    {
+        "prompt": "在osp开发平台中，有PO组件，实现生成PO对象功能",
+        "response": "var PO = new JParamObject();"
+    },
+    {
+        "prompt": "在osp开发平台中，有PO组件，实现往PO的Param中设置值功能",
+        "response": "PO.setParam(key, value);"
+    },
+    {
+        "prompt": "在osp开发平台中，有PO组件，实现从PO的Env中获取值功能",
+        "response": "PO.getEnv(key, value);"
+    },
+    {
+        "prompt": "在osp开发平台中，有EFRowSet组件，实现生成EFRowSet对象功能",
+        "response": "var rowSet = new EFRowSet();"
+    },
+    {
+        "prompt": "在osp开发平台中，有EFDataSet组件，实现生成EFDataSet对象功能",
+        "response": "var dataSet = new EFDataSet();"
+    },
+    {
+        "prompt": "在osp开发平台中，有EFMDMDataModel组件，实现生成EFMDMDataModel对象功能",
+        "response": "var mdmDataModel = new EFMDMDataModel();"
+    },
+    {
+        "prompt": "在osp开发平台中，实现生成UUID的功能",
+        "response": "var uuid = UUID();"
+    },
+    {
+        "prompt": "在osp开发平台中，实现获取package中配置的变量功能",
+        "response": "第一种方式：\nRegistry.getSystemParam('saveJSONForm2DB');\n第二种方式：\nEAI.getEnv(\"saveJSONForm2DB\", \"0\");\n// 注：【saveJSONForm2DB】为配置的key值\n获取EAIserver地址\nlet imUrl = EAIServerManager.getEAIServerPath('pm-im-server');"
+    },
+    {
+        "prompt": "在osp开发平台中，实现获取环境变量功能",
+        "response": "EAI.getEnv(key, def);"
+    },
+    {
+        "prompt": "在osp开发平台中，实现设置环境变量功能",
+        "response": "EAI.putEnv(key, value);"
+    },
+    {
+        "prompt": "在osp开发平台中，实现系统提示(一个按钮提示)功能",
+        "response": "window.showAlertMsg('系统提示', '请点击确定保存', '1', '确定', FunctionComp1);"
+    },
+    {
+        "prompt": "在osp开发平台中，实现系统提示(两个按钮提示)功能",
+        "response": "window.showConfirmMsg('系统提示', '请点击确定保存', '1', '确定', '取消', FunctionComp1, FunctionComp2);"
+    },
+    {
+        "prompt": "在osp开发平台中，实现将后台返回的 dataSet 数据转成 EFDataSet 对象功能",
+        "response": "var dataSet = Object.assign(new EFDataSet(), data.ResponseObject);"
+    },
+    {
+        "prompt": "在osp开发平台中，实现前台往后台传dataSet功能",
+        "response": "// 前台传：\nvar selectedDS = AGGrid1.getSelectedDataSet();\nPO.setValueByParamName(\"APPLY_TO_DATASET\",selectedDS);\nPO.jsonTypeLimit.set(\"APPLY_TO_DATASET\", \"com.efounder.builder.base.data.EFDataSet\");\n\n// 后台接收：\nEFDataSet applyToDataSet = (EFDataSet) po.getValue(\"APPLY_TO_DATASET\",null);\n "
+    },
+    {
+        "prompt": "在osp开发平台中，实现关闭所有标签页功能",
+        "response": "window.closeAllTabs();"
+    },
+    {
+        "prompt": "在osp开发平台中，实现关闭当前页的GWT表单功能",
+        "response": "window.closeCurrTabInReact();"
+    },
+    {
+        "prompt": "在osp开发平台中，实现关闭id对应的tab功能",
+        "response": "window.closeGWTFormInReact(id);"
+    },
+    {
+        "prompt": "在osp开发平台中，实现关闭其它标签页功能",
+        "response": "window.closeOtherTabs();"
+    },
+    {
+        "prompt": "在osp开发平台中，实现获取内容的高度功能",
+        "response": "window.getContentHeight();"
+    },
+    {
+        "prompt": "在osp开发平台中，实现获取内容宽度功能",
+        "response": "window.getContentWidth();"
+    },
+    {
+        "prompt": "在osp开发平台中，实现获取标签页的数量功能",
+        "response": "window.getTagsCount();"
+    },
+    {
+        "prompt": "在osp开发平台中，实现跳转401界面功能",
+        "response": "window.goToError401();"
+    },
+    {
+        "prompt": "在osp开发平台中，有window组件，实现移动端退出登录功能",
+        "response": "window.mobileLoginOut();"
+    },
+    {
+        "prompt": "在osp开发平台中，有window组件，实现根据传入的item打开表单功能方法功能",
+        "response": "window.openFormItem(props,item);"
+    },
+    {
+        "prompt": "在osp开发平台中，有window组件，实现脚本中打开GWT表单功能",
+        "response": "var stub = window.StubObject();\n // id可以不传，会自动生成随机数\nstub.setObject('id', '123123123');\nstub.setObject(\"contentView\", \"html5_FormDesigner.form1\");\nstub.setObject(\"caption\", \"表单设计器\");\nstub.setObject(\"forms\", \"html5_FormDesigner\");\nwindow.openGWTFormInReact(stub);"
+    },
+    {
+        "prompt": "在osp开发平台中，有window组件，实现脚本中打开React设计器功能",
+        "response": "window.openReactDesigner();"
+    },
+    {
+        "prompt": "在osp开发平台中，有window组件，实现脚本中打开React表单功能",
+        "response": "window.openReactForm(\n    {\n        id: 'id',\n        caption: '标题',\n        serverID: 'serverID', // 不需要可不传\n        config: {\n            displayType: 'DrawerForm', // 打开方式，默认为 OpenTab:应用新tab页; DrawerForm: 抽屉； BrowserTab：浏览器tab页； OpenWindow：弹窗\n            forms: '表单id',\n            windowWidth:'100px',\n            windowHeight:'100px',//弹窗的高度\n        }\n    }\n)\n或者\nwindow.openReactForm(\n    {\n        id: 'id',\n        caption: '标题',\n        serverID: 'serverID', // 不需要可不传\n        config: {\n            displayType: 'OpenTab', // 打开方式，默认为 OpenTab:应用新tab页\n            formID: '表单id',\n        }\n    }\n)\n或者\nlet param = {};\nparam.id = \"id\";\nparam.caption = '测试';\n \nlet config = {};\nconfig.displayType = 'DrawerForm';\nconfig.formID = '表单id';\nconfig.formType = 'ReactForm';\nconfig.windowWidth = '800';\nconfig.个性化参数 = xxxxx;\nparam.config = config;\n \nwindow.openReactForm(param);\n \n \n// 可能会用到的参数\nopenNum: '1',//如果openNum不等于1，则允许打开多个；默认不等于1"
+    },
+    {
+        "prompt": "在osp开发平台中，有window组件，实现脚本中打开硬编码组件功能",
+        "response": "window.openReactForm(\n    {\n        id: 'id',\n        caption: '标题',\n        serverID: 'serverID', // 不需要可不传\n        config: {\n            displayType: 'OpenTab', // 打开方式，默认为 OpenTab:应用新tab页; DrawerForm: 抽屉； BrowserTab：浏览器tab页； OpenWindow：弹窗\n            reactCompType: '硬编码组件id',\n        }\n    }\n)"
+    },
+    {
+        "prompt": "在osp开发平台中，有window组件，实现修改tab页标题功能",
+        "response": "window.updateCurrentTabTitle(\"新名字\");"
+    },
+    {
+        "prompt": "在osp开发平台中，有window组件，实现脚本打开iframe组件功能",
+        "response": "window.openReactForm(\n    {\n        id: 'id',\n        caption: '标题',\n        serverID: 'serverID', // 不需要可不传\n        config: {\n            displayType: 'OpenTab', // 打开方式，默认为 OpenTab:应用新tab页; DrawerForm: 抽屉； BrowserTab：浏览器tab页； OpenWindow：弹窗\n            webURL: 'iframe地址',\n        }\n    }\n)"
+    },
+    {
+        "prompt": "在osp开发平台中，有PO组件，实现PO设置EFDataSet功能",
+        "response": "PO.setValue(\"dataSetKey\",dataSet.toJson());\nPO.jsonTypeLimit.set(\"dataSetKey\", \"com.efounder.builder.base.data.EFDataSet\");"
+    },
+    {
+        "prompt": "在osp开发平台中，有window、FormAlert组件，实现提醒功能",
+        "response": "/**\n * 一个按钮提示\n * @param {*} title 标题\n * @param {*} infoText 提示内容\n * @param {*} messageType 图标类型，'MESSAGE_NORMAL'或'0'、'MESSAGE_WARN'或'1'、'MESSAGE_ERROR'或'2'、'MESSAGE_QUESTION'或'3'\n * @param {*} okText 按钮文本，默认为确定\n * @param {*} okFunc 确定回调函数\n */\nwindow.showAlertMsg('系统提示', '请点击确定保存', '1', '确定', FunctionComp1);\n \n/**\n * 两个按钮提示\n * @param {*} title 标题\n * @param {*} infoText 提示内容\n * @param {*} messageType 图标类型，'MESSAGE_NORMAL'或'0'、'MESSAGE_WARN'或'1'、'MESSAGE_ERROR'或'2'、'MESSAGE_QUESTION'或'3'\n * @param {*} okText 第二个按钮文本，默认为确定\n * @param {*} cancelText 第一个按钮文本，默认为取消\n * @param {*} okFunc 确定回调函数\n * @param {*} cancelFunc 取消回调函数\n */\nwindow.showConfirmMsg('系统提示', '请点击确定保存', '1', '确定', '取消', FunctionComp1, FunctionComp2);\n \n/**\n * 三个按钮提示\n * @param {*} title 标题\n * @param {*} infoText 提示内容\n * @param {*} messageType 图标类型，'MESSAGE_NORMAL'或'0'、'MESSAGE_WARN'或'1'、'MESSAGE_ERROR'或'2'、'MESSAGE_QUESTION'或'3'\n * @param {*} okText 第三个按钮文本，默认为确定\n * @param {*} submitText 第二个按钮文本\n * @param {*} cancelText 第一个按钮文本，默认为取消\n * @param {*} okFunc 确定回调函数\n * @param {*} submitFunc 提交回调函数\n * @param {*} cancelFunc 取消回调函数\n */\nwindow.showCustomMsg('系统提示', '请点击确定保存', '1', '确定', '提交', '取消', FunctionComp1, FunctionComp2, FunctionComp3);\n \n /**\n * alert提示框 ，一个按钮\n * @param infoText 提示文本内容\n * @param title 提示框标题\n * @param messageType 消息类型，图标类型，'MESSAGE_NORMAL'或'0'、'MESSAGE_WARN'或'1'、'MESSAGE_ERROR'或'2'、'MESSAGE_QUESTION'或'3'\n * @param okText ok按钮的标题，可传参数，默认为'确定'\n * @param okFunc 点击ok按钮后执行的自定义函数，可传参数\n */\nFormAlert.showAlert('请点击确定保存', '系统提示', '1', '确定', FunctionComp1);\n \n/**\n * confirm 两个按钮的消息提示框\n * @param infoText 提示文本内容\n * @param messageType 消息类型\n * @param title 提示框标题\n * @param okText ok按钮文字\n * @param cancelText no按钮文字\n * @param okFunc ok按钮对应的自定义函数\n * @param cancelFunc no按钮对应的自定义函数\n */\nFormAlert.showConfirm('请点击确定保存', '系统提示', '1', '确定', '取消', FunctionComp1, FunctionComp2);\n \n /**\n * 三个按钮的提示框\n * @param infoText 提示内容\n * @param title 提示标题\n * @param messageType 图标类型，提示类型\n * @param okText ok按钮标题\n * @param submitText no按钮标题\n * @param cancelText cancel按钮标题\n * @param okFunc ok按钮执行的自定义函数\n * @param submitFunc no按钮执行的自定义函数\n * @param cancelFunc cancel按钮执行的自定义函数\n */\nFormAlert.showMessage('请点击确定保存', '系统提示', '1', '确定', '提交', '取消', FunctionComp1, FunctionComp2, FunctionComp3);\n \n/**\n * 显示错误提示框\n * @param text\n */\nFormAlert.showErrorAlert('请点击确定保存');\n \n/**\n * 显示警告提示框\n * @param text\n */\nFormAlert.showWarnAlert('请点击确定保存')\n \n/**\n * 显示普通提示消息\n * @param text\n */\nFormAlert.showNormalAlert('请点击确定保存')"
+    },
+    {
+        "prompt": "在osp开发平台中，有PO组件，实现PO设置json数组功能",
+        "response": "var rowList = AGGrid1.getSelectedRowSetList();\nvar jsonArray = [];\nfor (let i = 0; i < rowList.length; i++) {\n    var rowSet = rowList[i];\n    jsonArray.push(rowSet.toJson());\n}\nPO.setValue(\"ITEM_DATA\",JSON.stringify(jsonArray));"
+    },
+    {
+        "prompt": "在osp开发平台中，有Action组件，实现强制设置Action组件禁用/可用功能",
+        "response": "XXXAction1.setForceDisable(true);//设置禁用\nXXXAction1.setForceEnable(true);//设置可用"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid、column组件，实现表格手动实现行数据排序功能",
+        "response": "// 根据 Column2 的数据排序\nAGGrid1.doSortByColumn(Column2);\n \n \n/**\n * 排序某列\n * @param dataSetColID 数据集列ID\n * @param order 可传参数，不传时按默认规则(默认 -> asc -> desc)排序； 'asc': 正序, 'desc': 倒序, null: 清空排序\n */\npublic doSortByColumn(column: Column, order?: string)\n \n \n/**\n * 清空所有排序状态\n */\npublic clearSorting()\n \n \n/**\n * 获取某一列的排序状态\n * @param column 列对象\n * @returns null: 默认状态  asc: 正序   desc: 倒序\n */\npublic getColumnSortState(column: Column)"
+    },
+    {
+        "prompt": "在osp开发平台中，实现派发顶部事件功能",
+        "response": "/**\n * 根据topEventID调用formViewContainer的topEventHandler方法\n * @param topEventID 事件ID\n * @param params 其他参数\n */\nTopEventManager.dispatchTopEvent('top_aggrid', '111')"
+    },
+    {
+        "prompt": "在osp开发平台中，有window组件，实现系统提示弹窗",
+        "response": "/**\n * 显示提示信息\n * @param {*} message title信息\n * @param {*} description 详细信息\n * @param {*} placement 显示位置： topLeft, topRight, bottomLeft, bottomRight， 显示位置默认都是topRight\n */\n \n \n// 打开带成功图标的弹窗\nwindow.InfoMsg().success(\"标题\",\"介绍\",\"topRight\");\n \n \n// 打开带信息图标的弹窗\nwindow.InfoMsg().info(\"标题\",\"介绍\",\"topRight\");\n \n \n// 打开带异常图标的弹窗\nwindow.InfoMsg().warn(\"标题\",\"介绍\",\"topRight\");\n \n// 打开带失败图标的弹窗\nwindow.InfoMsg().error(\"标题\",\"介绍\",\"topRight\");"
+    },
+    {
+        "prompt": "在osp开发平台中，有WebService组件，实现调用接口功能",
+        "response": "/**\n * IOM 方法\n * @param objectName 类名\n * @param objectMethod 方法名\n * @param paramObject PO对象\n * @param dataObject 可传对象\n * @param customObject 可传对象\n * @param addObject 可传对象\n * @param webContext 上下文对象\n */\nWebService1.IOM('FlowIOService', 'getFlowXML', PO);\n \n \n/**\n * SVR 方法\n * @param serviceKey 服务key\n * @param paramObject PO对象\n * @param dataObject 可传参数\n * @param customObject 可传参数\n * @param addObject 可传参数\n * @param webContext 可传参数\n */\nWebService1.SVR('LargeDICTService', PO);\n \n \n/**\n * POST、GET 调用 restful 接口\n * @param url 接口路径\n * @param data 入参\n * @param headers 请求头，可传参数\n */\nWebService1.POST('http://127.0.0.1:8080/PortalServer/xxx/xx', data);\nWebService1.GET('http://127.0.0.1:8080/PortalServer/xxx/xx', data);\n \n \n/**\n * 调用 restful 接口\n * @param url 接口路径\n * @param method 'GET' | 'DELETE' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT' | 'PATCH' | 'LINK' | 'UNLINK'\n * @param data 入参\n * @param headers 请求头，可传参数\n */\nWebService1.REST('http://127.0.0.1:8080/PortalServer/xxx/xx', 'GET', data);"
+    },
+    {
+        "prompt": "在osp开发平台中，有EFDataSet组件，实现后台类EFDataSet，EFRowSet的json转EFDataSet，EFRowSet",
+        "response": "// 转EFDataSet 后台传来的类似EFDataSet的json\nlet  dataSetJson = data.getResponseObject();\nlet dataSet = new EFDataSet();\ndataSet = dataSet.toDataSet(dataSetJson)\n// 转EFRowSet后台传来的类似EFRowSet的json\nlet  rowSetJson = data.getResponseObject(); \nlet rowSet = new EFRowSet();\nrowSet = rowSet.toRowSet(rowSetJson)"
+    },
+    {
+        "prompt": "在osp开发平台中，设置默认时间",
+        "response": "var date = new Date();\nvar year = date.getFullYear().toString();\nvar month = (date.getMonth()+1).toString();\nif(month.length == 1){\n    month = \"0\"+month;\n}\nvar days = date.getDate().toString();\nif(days.length ==1){\n    days = \"0\"+days\n}\nvar date = year+month+days;\nbillRowSet.putObject(\"日期字段\",date);"
+    },
+    {
+        "prompt": "在osp开发平台中，有FunctionComp组件，实现自定义应用全局参数场景",
+        "response": "// A表单中定义全局参数\nCustomAppContext.setValue('CK_001', FunctionComp1);\nCustomAppContext.setValue('CK_002', FunctionListComp1);\n// B表单中获取全局参数\nvar comp1 = CustomAppContext.getValue('CK_001');\nvar comp2 = CustomAppContext.getValue('CK_002');\n// B表单中调用全局参数中的函数对象\n/**\n * 调用 FunctionComp 组件\n * @param key map中的key\n * @param args FunctionComp 组件的call方法参数\n * @returns\n */\nCustomAppContext.callFunctionComp('CK_001', '测试参数输出');\n \n/**\n * 调用 FunctionListComp 组件中的 funcName 方法\n * @param key map中的key\n * @param funcName FunctionListComp 中的函数名\n * @param args FunctionListComp 组件中的 funcName 方法参数\n * @returns\n */\nCustomAppContext.callFunctionListComp('CK_002', 'aaa', {\n    \"arg1\": 111,\n    \"arg2\": 222\n});\n"
+    },
+    {
+        "prompt": "在osp开发平台中，有modelContainer组件，实现新建数据不默认增加修改时间值，编辑数据增加修改时间值场景",
+        "response": "// A表单根据新建或者编辑传递类型参数\nmodelContainer.setValue(\"type\",addFlag);\n\n// B表单在模型中设置PO 新建数据不默认增加修改时间值 编辑数据增加修改时间值\nvar type = modelContainer.getValue(\"type\",\"\");\nif(type == '1'){\n    PO.setParam(\"F_CHDATE_ADDABLE\",\"0\");\n}else if(type == '0'){\n    PO.setParam(\"F_CHDATE_ADDABLE\",\"1\");\n}\n// 回显数据\nPO.setValueByParamName(\"isGetBackGeneratedCols\",\"1\");"
+    },
+    {
+        "prompt": "在osp开发平台中，有FormBoxContainer组件，实现脚本创建组件功能",
+        "response": "// 必传参数\nvar myButton =  CompFactory.createUIComp({\n      \"type\": \"FormButton\",\n});\n \n// 添加一个组件时，用addChild即可，addChildren也行\nFormBoxContainer1.addChild(myButton);\nFormBoxContainer1.addChildren([myButton]);\n \n// 往一个容器中同时添加多个组件，必须使用addChildren方法，避免多次渲染\nFormBoxContainer1.addChildren([button1, button2]);"
+    },
+    {
+        "prompt": "在osp开发平台中，有工具类StringUtil组件，实现将字符串转成Map功能",
+        "response": "/**\n     * 将字符串转成Map, eg:  1:a;2:b;\n     * @param str 带转成Map的字符串\n     * @param sign1 一级分隔符 ';'\n     * @param sign2 二级分隔符 ':'\n     * @returns\n     */\nStringUtil.getMapFromStr(\"1:a;2:b;\",\";\",\":\");"
+    },
+    {
+        "prompt": "在osp开发平台中，有工具类StringUtil组件，实现判断字符是否为空的方法功能",
+        "response": "StringUtil.isEmpty(value)；"
+    },
+    {
+        "prompt": "在osp开发平台中，实现自定义表单快捷键功能",
+        "response": "// ctrl+s 单据保存\nif(event.keyCode == 83 && event.ctrlKey) {\n    FormSaveAction1.doAction();\n    // 以下两行酌情添加\n    event.preventDefault(); // 阻止默认事件\n    event.stopPropagation();// 阻止事件继续往下冒泡\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，有ReactFormWindowAction组件，实现自定义确定取消按钮场景",
+        "response": "// 打开弹窗表单确认按钮\nlet win = modelContainer.getValue('formUserWindow',null);//获取到当前弹出表单对象, formUserWindow 是固定key\nwin.doOkFunctionAndClose(’要传输的值‘); //调用确定并关闭函数，并设置要回传的值，在回调函数的data中即可获取值\nwin.doOkFunctionAndClose(); //当直接调用不传值的情况下，回调函数中data默认为nodeContext\n// 打开弹窗表单取消按钮\nlet win = modelContainer.getValue('formUserWindow',null);//获取到当前弹出表单对象\nwin.doCancelFunctionAndClose(’要传输的值‘);//调用取消并关闭函数，并设置要回传的值，在回调函数的data中即可获取值\nwin.doCancelFunctionAndClose(); //当直接调用不传值的情况下，回调函数中data默认为nodeContext"
+    },
+    {
+        "prompt": "在osp开发平台中，有FlowTaskModel组件，实现待办已办加载场景",
+        "response": "// 分页时加载方式，通过分页加载：\nPendingPageToolbar1.loadPage(1);//加载第一页数据\n// 不使用分页组件加载方式：\nFlowTaskModel1.load();//任意位置调用load加载数据\nlet dsPending = FlowTaskModel1.getAllTaskList(taskDataSet, 'TASKPendingDataSet');//在FlowTaskModel1的loadEnd脚本中处理获得的待办数据\n//let dsProcess = FlowTaskModel1.getAllTaskList(taskDataSet, 'TASKProcessedDataSet');//在FlowTaskModel1的loadEnd脚本中处理获得的已办数据\nAGGrid1.setDataSet(dsPending)//放入表格组件，或做其他处理。"
+    },
+    {
+        "prompt": "在osp开发平台中，有FlowTaskModel组件，实现历史任务场景",
+        "response": "// 分页时加载方式，通过分页加载：\nPendingPageToolbar1.loadPage(1);//加载第一页数据\n不使用分页组件加载方式：\nFlowEndTaskModel1.load();//任意位置调用load加载数据\nlet dsFinish = FlowEndTaskModel1.getFinishTaskList(taskDataSet, 'TASKFinishDataSet');//在FlowEndTaskModel1的loadEnd脚本中处理获得的待办数据\nAGGrid1.setDataSet(dsFinish)//放入表格组件，或做其他处理。"
+    },
+    {
+        "prompt": "在osp开发平台中，有FlowTaskView组件，实现流程展示=场景",
+        "response": "let flowPO = new JParamObject();\nflowPO.setValue(\"FLOW_ID\",\"SYS_ROLE_APPLY\")\nflowPO.setValue(\"OBJ_GUID\", \"A8E65C624CF88444EB39D96FD2C63247\");\nflowPO.setValue(\"isprocessedAndPendingTaskUserList\", \"1\");\nFlowTaskView1.autoSubmitTask(flowPO);"
+    },
+    {
+        "prompt": "在osp开发平台中，有字典元数据组件，实现MdmColumnModelBuilder构建字典动态卡片场景",
+        "response": "DCTMetaDataModel1.load();\n// DCTMetaDataModel1的endload中获取元数据dataset并通过MdmColumnModelBuilder构建：\nvar objColsDataSet = dctMetaData.getDoMetaDataColumns();\nif (objColsDataSet != null) {\n        MdmColumnModelBuilder1.buildDCTColumnModel(objColsDataSet);\n}\nMdmColumnModelBuilder1的endBuild中根据DynamicMDMCardBuilder构建卡片：\nDynamicMDMCardBuilder1.build();"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid1表格组件，实现获取当前表格数据集场景",
+        "response": "var dataset = AGGrid1.getMdmDataModel().getDataSet('XXX');"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid1、Column组件，实现column弹出自定义表单窗口场景",
+        "response": "editColumn.getModelContainer().setValue(\"xxx\",xxxx');//弹出帮助子表单使用"
+    },
+    {
+        "prompt": "在osp开发平台中，有监听事件，实现监听事件场景\n\n ",
+        "response": "// 表单画布topEventHandler方法中设置 注意表单画布需要配置监听事件属性\nvar event = params;\nif(event == \"event\"){\n   // ……逻辑处理 \n}\n// 发送监听\nTopEventManager.dispatchTopEvent(\"event\",\"event\");"
+    },
+    {
+        "prompt": "在osp开发平台中，有ServerScriptComp、MDModel组件，实现监听事件场景",
+        "response": "PO.setParam(\"字典名_MDMSelfWhere\", where);\nPO.setParam(\"表名_MDMSelfOrder\", \"字段名 ASC \");"
+    },
+    {
+        "prompt": "在osp开发平台中，有FormCascaderComboBox组件，实现下拉级联组件赋值功能",
+        "response": "FormCascaderComboBox1.getItemBM();\nFormCascaderComboBox1.getItemMC();\nFormCascaderComboBox2.setObject(['01','01AE','01AEAJ'],['亚洲','阿拉伯联合酋长国','阿治曼'])"
+    },
+    {
+        "prompt": "在osp开发平台中，有FormButton组件，实现按钮设置样式功能",
+        "response": "FormButton1.setStyle({color:\"#FFFFFF\",backgroundColor:\"#0081CC\"})\nFormButton1.setStyle({preinstallStyle:\"primary\"})"
+    },
+    {
+        "prompt": "在osp开发平台中，有FormBoxContainer组件，实现脚本调用全屏功能",
+        "response": "FormBoxContainer1.setFullscreen(true) ;"
+    },
+    {
+        "prompt": "在osp开发平台中，有DMTree组件，实现清空DMTree分级树数据功能",
+        "response": "DMTree1.initTreeDataArray(null);"
+    },
+    {
+        "prompt": "在osp开发平台中，有FormModel组件，实现取明细表数据集功能",
+        "response": "var billDataSet = FormModel1.getBillDataSet().getRowSet(0);//获取表头数据\nvar itemDataSet = billDataSet.getDataSet(\"分录表id\");// 获取分录数据\nvar detailDataSet = itemDataSet.getRowSet(0).getDataSet(\"明细表id\");// 获取明细数据"
+    },
+    {
+        "prompt": "在osp开发平台中，实现取组件id功能",
+        "response": "FormButton1.props.base.key"
+    },
+    {
+        "prompt": "在osp开发平台中，有FormButton组件，实现文本框脚本获得焦点功能",
+        "response": "FormTextInput1.inputCompRef.current.focus();"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid组件，实现修改单元格编辑属性功能",
+        "response": "// 第一种单元格编辑器在beginEdit方法中\nreturn \"0\";\n// 第二种表格控制\nif(AGGrid1.getSelectedRowSet().getIsNew()){\n    AGGrid1.startEditingCell(rowSet,Column11);\n}else{\n    AGGrid1.getPanGridRef().api.stopEditing();\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，有PO对象，实现字典加载设置不加载某些外键字典场景",
+        "response": "PO.setParam(\"NOT_LOAD_FKEY_COLUMN\",\"列1,列2\");"
+    },
+    {
+        "prompt": "在osp开发平台中，有ColumnModel、Column对象，实现获取组件动态编号并设置组件名称场景",
+        "response": "var cm = ColumnModel2.props.getComponentByKey('Column'+'1');\ncm.setHeaderText(\"编号1\");\nAGGrid1.refreshColumn();"
+    },
+    {
+        "prompt": "在osp开发平台中，有MDModel对象，实现脚本保存数据场景",
+        "response": "var factRowset = new EFRowSet();\nvar factDatamodel = MDModel5.getMdmDataModel();\nvar factDataset = null;\nif(factDatamodel != null){\n        factDataset = factDatamodel.getDataSet(\"SYS_FACTS\");\n        factRowset.putString(\"FCT_ID\",obj_id);\n        factRowset.putString(\"FCT_MC\",obj_mc);\n        factRowset.putString(\"FCT_TYPE\",\"00\");\n        factRowset.putString(\"SYS_ID\",SYS_ID);\n        factRowset.putString(\"OBJ_ID\",obj_id);\n\n        factDataset.insertRowSet(factRowset);\n        MDModel5.getMdmDataModel().setDataSet(factDataset);\n        // 设置编辑状态，防止无法保存数据\n        MDModel5.getMdmDataModel().setFormChangeStatus();\n        MDMSaveAction5.doAction();\n        / /重置编辑缓冲区\n        MDModel5.resetDataSetPool();\n}\n\n"
+    },
+    {
+        "prompt": "在osp开发平台中，有MDModel对象，实现脚本保存数据场景",
+        "response": "// 父表单\nvar nodeContext = new StubObject();   \nnodeContext.setObject(\"flag\",\"1\");\nFormContainerBuilder2.showForm(\"表单id\",nodeContext);\n// 子表单\nvar flag = modelContainer.getValue(\"flag\",\"\");"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid组件，实现AGGrid表格滑动到第一行功能",
+        "response": "AGGrid1.gridApi.ensureIndexVisible(0);"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid组件，实现获取右键菜单所右键的行数据和列的dataSetID功能",
+        "response": "var index = AGGrid1.getAGGridApi().getFocusedCell().rowIndex;//获取右键的单元格所在的行下标\nvar row = data.getRowSet(index);//通过下标获取当前行数据\nvar cloId= AGGrid1.getAGGridApi().getFocusedCell().column.colId;//右键列的id\nvar dataId = AGGrid1.getAGGridApi().getFocusedCell().column.colDef.field//右键列的dataSetID\nvar name = AGGrid1.getAGGridApi().getFocusedCell().column.colDef.headerName//右键列的名称"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid组件，实现表格数据缓存功能（类似GWT中的FormCacheGrid）功能",
+        "response": "// 表格开启缓存数据属性\n// 在脚本中设置表格的缓存key，用于表格获取对应的缓存数据\nAGGrid1.setCacheKey('xxx');\n// 在脚本中向表格添加缓存数据\n一次添加一条：AGGrid1.addItem(rowSet);\n一次添加多条：AGGrid1.addItems([rowSet1, rowSet2, ......]);\n// 在脚本中保存添加完的缓存数据\nAGGrid1.saveData();\n// 加载缓存数据\nAGGrid1.loadData();"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid组件，实现表格清除数据功能",
+        "response": "AGGrid1.getDataSet().removeAllRowSet()"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid组件，实现自适应文本内容的宽度功能",
+        "response": "AGGrid1.autoSizeAllColumns(true);\nAGGrid1.autoSizeAllColumns(false);"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid组件，实现清空选择行功能",
+        "response": "AGGrid4.deselectAll();"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid组件，实现执行排序功能",
+        "response": "// 后台排序\nAGGrid1.doBackSort(Column,'asc');\n// 前台排序\nAGGrid1.doSortByColumn(Column,'asc');"
+    },
+    {
+        "prompt": "在osp开发平台中，有MDModel组件，实现获取删除、插入、修改数据集功能",
+        "response": "MDModel1.getDeleteDataSetPool();\nMDModel1.getInsertDataSetPool();\nMDModel1.getUpdateDataSetPool()"
+    },
+    {
+        "prompt": "在osp开发平台中，有PendingPageToolbar组件，实现分页加载第一页功能",
+        "response": "PendingPageToolbar1.loadPage(1);"
+    },
+    {
+        "prompt": "在osp开发平台中，有MDModel、DCTPagingToolBar组件，实现数据保存完成刷新并可编辑场景",
+        "response": "// model的afterSave方法中\nMDModel1.startEdit();\nDCTPagingToolBar1.loadPage(1);"
+    },
+    {
+        "prompt": "在osp开发平台中，有MDDataChecker组件，实现校验输入字段是否为空",
+        "response": "// MDDataCheckerd的beforeSave方法中 \nvar rowCount = dataSet.getRowCount();//获取行数\n//遍历dataSet\nfor(var i = 0; i < rowCount; i++){\n        var row = dataSet.getRowSet(i);                 \n        var name = row.getString(\"\"PTAL_USER_NA\"\",\"\"\"\");//获取该行OSP_USER_NAME列的值\n        //判断编号列是否为空，为空提示并返回\n        if(name== null || name.trim().length == 0){\n                window.showAlertMsg('系统提示', '员工姓名不能为空', '1', '确定', null);\n                return 0;\n        }\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，有MDDataChecker组件，实现校验输入字段长度场景",
+        "response": "// MDDataCheckerd的beforeSave方法中 \nvar rowCount = dataSet.getRowCount();  //获取行数\n//遍历dataSet\nfor(var i = 0; i<rowCount; i++){\n        var row = dataSet.getRowSet(i);    \n        var tel = row.getString(\"PTAL_USER_TEL\",\"\"); //获取该行OSP_USER_TEL列的值\n        //判断手机号长度，不符合提示并返回\n        if(tel.trim().length != 11){\n          window.showAlertMsg('系统提示','联系电话必须为11位手机号！', '1', '确定', null);\n         return 0;\n        }\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，有MDDataChecker组件，实现判断是否含有特殊字符场景",
+        "response": "// 判断是否含有特殊字符\nvar rowCount = dataSet.getRowCount();  //获取行数\nvar valueCheck = /^[a-zA-Z0-9_]{1,}$/;\n\n// 遍历dataSet\nfor(var i = 0; i<rowCount; i++){\n        var row = dataSet.getRowSet(i);    \n        var value = row.getString(\"value\",\"\"); //获取该行OSP_USER_TEL列的值\n        if (!value.match(valueCheck)) {\n                MessageBox.showAlertMsg('系统提示','包含特殊字符', '1', '确定', null');\n                return \"\"0\"\";\n        }\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，有GeneralPagingToolBar组件，实现获取当前页并刷新当前页场景",
+        "response": "let currentPageIndex = GeneralPagingToolBar1.getCurrentPageIndex();\nGeneralPagingToolBar1.loadPage(currentPageIndex);"
+    },
+    {
+        "prompt": "在osp开发平台中，实现表单脚本调用url场景",
+        "response": "//获取serverId\nvar serverID = modelContainer.getValue(\"serverID\",\"\");\n//获取EAIServer的URL\nvar path = EAIServerManager.getEAIServerPath(serverID);\nif(path == null || path == \"\"){\n    path = EAI.getBaseUrl();\n}\nvar url = path + \"/CtrlService?action=……\";\nurl = encodeURI(encodeURI(url));\nwindow.location.href = url ;"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid组件，实现表格没有数据展示\"暂无数据\"场景",
+        "response": "// customNoRowsOverlayHtmlText方法中\nreturn \"<div><p class=\\\"osp-grid-empty\\\">暂无数据</p></div>\";"
+    },
+    {
+        "prompt": "在osp开发平台中，有Action组件，实现执行action操作",
+        "response": "XXaction.doAction();"
+    },
+    {
+        "prompt": "在osp开发平台中，有Action组件，实现强制组件为禁用状态操作",
+        "response": "XXaction.setForceDisable(true);"
+    },
+    {
+        "prompt": "在osp开发平台中，有Action组件，实现强制设置Action为可用状态操作",
+        "response": "XXaction.setForceEnable(false);"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid组件，实现表格没有选择数据进行提示场景",
+        "response": "var rowSet = AGGrid1.getSelectedRowSet();\nif(rowSet == null || rowSet == \"\"){\n         MessageBox.error('请先选择一行数据');// 提示方式可更换\n        return \"0\";\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现获取注册文件配置信息场景",
+        "response": "var value= Registry.getSystemParam(key);"
+    },
+    {
+        "prompt": "在osp开发平台中，有DMTree组件，实现树是否分级加载场景",
+        "response": "// 分级树分级加载\nDMTreeZZJG.setHierarchicalLoad(true);\n// 分级树不分级加载\nDMTreeZZJG.setHierarchicalLoad(false);"
+    },
+    {
+        "prompt": "在osp开发平台中，有FormLabel组件，实现树是否分级加载场景",
+        "response": "FormLabel1.getEscapedValue();"
+    },
+    {
+        "prompt": "在osp开发平台中，有AGGrid组件，实现获取选择行数据值场景",
+        "response": "var map = AGGrid4.getSelectedRowSet().getDataMap();\nvar isHave = map.get(\"F_GNBH\");\n\n// 或者\nvar  value = AGGrid4.getSelectedRowSet().getValue(\"F_GNBH\");"
+    },
+    {
+        "prompt": "在osp开发平台中，有MDMSaveAction组件，实现设置保存成功提示信息场景",
+        "response": "MDMSaveAction1.setSaveTip('保存成功！');"
+    },
+    {
+        "prompt": "在osp开发平台中，有GridCellEditor1组件，实现单元格根据新建行控制是否可编辑场景",
+        "response": "// GridCellEditor1 beginEdit方法\nif(editRowSet.getIsNew()){\n    return \"1\";\n}else{\n    return \"0\";\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，有FunctionComp组件，实现获取后台报错信息场景",
+        "response": "var RO = data;\nif(RO.getErrorCode() == -1){\n    var msg = RO.getErrorString();\n    MessageBox.error(\"停用失败,\" + msg); // 提示方式可替换\n    return;\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，有FormModel组件，实现加载业务模型元数据，并根据guid是否存在进行加载或者创建单据场景",
+        "response": "FormModel1.loadBIZModel();\n// FormModel1在bizMetaDataEndLoad 处理加载或者创建逻辑\nvar guid = modelContainer.getValue(\"OBJ_GUID\", \"\");\n// 如果取到的单据内码的值不为空\nif(guid !=null && guid != \"\") {\n    // 通过单据模型组件FormModel调用loadBillByGuid方法去加载单据\n    FormModel1.loadBillByGuid(guid);\n} else {\n    // 否则调用单据新建动作组件去新建一条单据\n    FormCreateAction1.doAction();\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，有FormModel组件，实现加根据单据guid加载单据数据场景",
+        "response": "var guid = modelContainer.getValue(\"F_GUID\", \"\");\nif(guid !=null && guid != \"\") {\n     FormModel1.loadBillByGuid(guid);\n     return;\n} "
+    },
+    {
+        "prompt": "在osp开发平台中，有FormModel、BIZMetaDataModel组件，实现设置业务元数据场景",
+        "response": "FormModel1.setBIZMetaData(BIZMetaDataModel1.getBizMetaData());"
+    },
+    {
+        "prompt": "在osp开发平台中，有FormModel组件，实现设置单据头常用参数场景",
+        "response": "//设置单据头默认值\nvar PO = new JParamObject();\nvar zdr = PO.getEnv(\"UserName\",\"\"); //获取当前用户编号\nbillRowSet.putString(\"BMSX_ZDR\",zdr); //设置制单人\nvar zdrm = PO.getEnv(\"UserCaption\",\"\"); //获取当前用户名称\nbillRowSet.setID2Name(\"BSUSER\",\"BMSX_ZDR\",zdrm); //制单人显示为名称\nbillRowSet.putObject(\"BMSX_DJLX\",\"003\");//设置单据类型\nbillRowSet.putObject(\"BMSX_DJZT\",\"0\");//设置单据状态为制单\nvar date = new Date();\nvar year = date.getFullYear().toString();\nvar month = (date.getMonth() + 1).toString();\nif ( month.length == 1 ) {\n        month = \"0\" + month;\n}\nvar days = date.getDate().toString();\nif ( days.length == 1 ) {\n        days = \"0\" + days;\n}\nvar date = year + month + days;\nbillRowSet.putObject(\"BMSX_DATE\",date);//设置制单日期"
+    },
+    {
+        "prompt": "在osp开发平台中，实现后台服务插件编写功能",
+        "response": "public class xxPlugin extends ServicePluginAdapter{\n    \n        private static final Logger logger = LoggerFactory.getLogger(xxPlugin .class);\n\n        public Object executeProcessService(ESPServerContext espContext,Object responseObject) throws Exception {\n            ……\n        }\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现后台通过上下文获取PO对象，并获取PO中参数功能",
+        "response": "JParamObject po = espContext.getParamObject();\nString zgbh = po.GetValueByParamName(\"F_ZGBH\", null);\nString loginUser = po.GetValueByEnvName(\"UserName\", null);"
+    },
+    {
+        "prompt": "在osp开发平台中，实现后台通过上下文获取conn数据库链接对象功能",
+        "response": "JConnection conn = espContext.getConnection();"
+    },
+    {
+        "prompt": "在osp开发平台中，实现后台执行查询单表，并获取查询出的值功能",
+        "response": "JResponseObject RO = espContext.getResponseObject();\nJConnection connetion = espContext.getConnection();\nPreparedStatement pstbm = null;\nResultSet rs = null;\nString sql = \"SELECT F_GUID,F_NAME,F_NOTE FROM SYS_FAVMENU_TYPE WHERE F_ZGBH = ?\";\ntry {\n        pstbm = connetion.prepareStatement(sql);\n        pstbm.setString(1, zgbh);\n        rs = pstbm.executeQuery();\n        while (rs.next()) {\n                String bh = rs.getString(\"F_GUID\");\n                ……\n        }\n} catch (Exception e) {\n        logger.error(\"错误信息：{}\" , e.getMessage());\n        RO.setErrorCode(JResponseObject.RES_ERROR);\n        RO.setErrorString(e.getMessage());\n        return RO;\n} finally {\n        JConnection.BackStatement(pstbm, rs);\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现后台执行批处理修改单表功能",
+        "response": "PreparedStatement pstbm = null;\nJConnection connetion = espContext.getConnection();\nString sql = \"UPDATE SYS_FAVMENU SET F_FLMC = ? WHERE F_ZGBH = ? AND F_FLBH = ?\";\ntry {\n        pstbm = connetion.prepareStatement(sql);\n        // 循环拼接值 获取值的方法也可以是循环dataset\n        for (StubObject stub : stubs) {\n                String name = stub.getString(\"F_NAME\", \"\");\n                String flbh = stub.getString(\"F_GUID\", \"\");\n                pstbm.setString(1, name);\n                pstbm.setString(2, zgbh);\n                pstbm.setString(3, flbh);\n                pstbm.addBatch();\n        }\n        pstbm.executeBatch();\n} catch (Exception e) {\n        logger.error(\"错误信息：{}\" , e.getMessage());\n        RO.setErrorCode(JResponseObject.RES_ERROR);\n        RO.setErrorString(e.getMessage());\n        return RO;\n} finally {\n        JConnection.BackStatement(pstbm, null);\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现后台执行批处理插入单表功能",
+        "response": "PreparedStatement pstbm = null;\nJConnection connetion = espContext.getConnection();\nString sql = \"insert into SYS_FAVMENU(F_GUID,F_NAME,F_ZGBH,F_CDBH,F_FLBH,F_FLMC,F_NOTE,F_PXBH)values(?,?,?,?,?,?,?,?)\";\ntry {\n        pstbm = connetion.prepareStatement(sql);\n        // 循环拼接值 获取值的方法也可以是循环dataset\n       for (StubObject stub : stubs) {\n                    String cdbh = stub.getString(\"MenuId\", \"\");\n                    String flbh = stub.getString(\"F_FLBH\", \"\");\n                    String note = stub.getString(\"F_NOTE\", \"\");\n                    String name = stub.getString(\"F_CDMC\", \"\");\n                    String flmc = stub.getString(\"F_FLMC\", \"\");\n                    String pxbh = stub.getString(\"F_PXBH\", \"\");\n                    pstbm.setString(1, UUID.randomUUID().toString());\n                    pstbm.setString(2, name);\n                    pstbm.setString(3, zgbh);\n                    pstbm.setString(4, cdbh);\n                    pstbm.setString(5, flbh);\n                    pstbm.setString(6, flmc);\n                    pstbm.setString(7, note);\n                    pstbm.setString(8, pxbh);\n                    pstbm.addBatch();\n                }\n        pstbm.executeBatch();\n} catch (Exception e) {\n        logger.error(\"错误信息：{}\" , e.getMessage());\n        RO.setErrorCode(JResponseObject.RES_ERROR);\n        RO.setErrorString(e.getMessage());\n        return RO;\n} finally {\n        JConnection.BackStatement(pstbm, null);\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现后台执行删除单表数据功能",
+        "response": "PreparedStatement pstbm = null;\nJConnection connetion = espContext.getConnection();\nString delSql = \"DELETE FROM SYS_FAVMENU WHERE F_ZGBH = ?\";\ntry {\n        pstbm = connetion.prepareStatement(delSql);\n        pstbm.setString(1, zgbh);\n        pstbm.execute();\n} catch (Exception e) {\n        logger.error(\"错误信息：{}\" , e.getMessage());\n        RO.setErrorCode(JResponseObject.RES_ERROR);\n        RO.setErrorString(e.getMessage());\n        return RO;\n} finally {\n        JConnection.BackStatement(pstbm, null);\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现拼接数据库前缀的表名功能",
+        "response": "String tableName = DBTools.getDBAObject(paramObject, \"SYS_OPLOG\");"
+    },
+    {
+        "prompt": "在osp开发平台中，实现将ResultSet中的一行生成到RowSet功能",
+        "response": "f (rs.next()) {\n        DataSetUtils.resultSet2RowSet(rs, rowSet);\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现字典根据上下文获取dctMetaData元数据，获取不到就返回功能",
+        "response": "String DCT_ID = mdmContext.getParamObject().GetValueByParamName(\"DCT_ID\", null);\nDCTMetaData dctMetaData = mdmContext.getDCTMetaData();\nif (dctMetaData == null) {\n        dctMetaData = (DCTMetaData) MetaDataManager.getInstance(MetaDataManager._DCTObject_).getMetaData(mdmContext, DCT_ID);\n        mdmContext.setDCTMetaData(dctMetaData);\n}\nif (dctMetaData == null) return null;"
+    },
+    {
+        "prompt": "在osp开发平台中，实现字典根据dctMetaData元数据获取外键列功能",
+        "response": "String colums[] = dctMetaData.getDoMetaData().getFKeyColIDs();"
+    },
+    {
+        "prompt": "在osp开发平台中，实现字典根据dctMetaData元数据获取指定扩展属性功能",
+        "response": "// 字典扩展属性配置 xx是key\nString xxvalue = dctMetaData.getDoMetaData().getSYS_OBJ_VAL(\"xx\", \"\");"
+    },
+    {
+        "prompt": "在osp开发平台中，实现字典根据mdmDataModel元数据获取插入数据功能",
+        "response": "// 获取插入数据集\nEFDataSet dataSet = mdmDataModel.getDataSet(dcts[i] + \"_INSERT\");"
+    },
+    {
+        "prompt": "在osp开发平台中，实现字典根据mdmDataModel元数据获取删除数据功能",
+        "response": "// 获取插入数据集\nEFDataSet dataSet = mdmDataModel.getDataSet(dcts[i] + \"_DELETE\");"
+    },
+    {
+        "prompt": "在osp开发平台中，实现字典根据mdmDataModel元数据获取修改数据功能",
+        "response": "// 获取插入数据集\nEFDataSet dataSet = mdmDataModel.getDataSet(dcts[i] + \"_UPDATE\");"
+    },
+    {
+        "prompt": "在osp开发平台中，实现定义日志输出日志功能",
+        "response": "private static final Logger logger = LoggerFactory.getLogger(xxPlugin .class);\n// 日志级别由高到底是：fatal -> error -> warn -> info -> debug,低级别的会输出高级别的信息，高级别的不会输出低级别的\nlogger.debug、logger.info、logger.warn、logger.error、logger.fatal \n"
+    },
+    {
+        "prompt": "在osp开发平台中，实现异常输出日志功能",
+        "response": "try{\n......\n} catch (IOException e) {\n    logger.error(\"错误信息：{}\" , e.getMessage());\n    ……\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现异常输出方式功能",
+        "response": "e.printStackTrace();// 打印完整的异常堆栈信息\ne.getMessage();// 打印 异常的原因\ne.toString();// 打印 异常类型 和 异常的原因\ne.getExceptionToString();// 打印完整的异常堆栈信息"
+    },
+    {
+        "prompt": "在osp开发平台中，实现获取配置文件配置值功能",
+        "response": "// package文件中   xx为key\nString value = ParameterManager.getDefault().getSystemParam(\"xx\");"
+    },
+    {
+        "prompt": "在osp开发平台中，实现基于Jersey的单据保存Restful开发功能",
+        "response": "/**\n* @Path :起到定位作用，如 http://localhost:8080/OSPServer/rest/save/saveform，这个链接，通过save定位到类：SaveFormModel，通过saveform定位到方法：saveFormData()；\n* @POST :HTTP方法，还有@GET\n* @Produces :指定将要返回给client端的数据标识类型(MIME)\n* @Consumes :代表的是一个资源可以接受的数据标识类型(MIME)\n* 注：类要继承 BaseRESTfulService以便于获取RESTful服务的基类（HttpServletRequest、HttpServletResponse、ServletConfig、ServletContext、UriInfo、HttpHeaders）\n*/\npackage osp.test;\n \nimport javax.ws.rs.Consumes;\nimport javax.ws.rs.POST;\nimport javax.ws.rs.Path;\nimport javax.ws.rs.Produces;\nimport javax.ws.rs.core.MediaType;\n \nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\n \nimport com.efounder.api.jersey.model.RESTResponseObject;\nimport com.efounder.api.jersey.service.BaseRESTfulService;\nimport com.efounder.eai.EAI;\nimport com.efounder.eai.data.JResponseObject;\nimport com.efounder.form.SuperJsonModel;\n \n@Path(\"/save\")\npublic class SaveFormModel extends BaseRESTfulService{\n    private static final Logger logger = LoggerFactory.getLogger(SaveFormModel.class);\n \n    @POST\n    @Path(\"/saveform\")\n    @Produces(MediaType.APPLICATION_JSON)\n    @Consumes(MediaType.APPLICATION_JSON)\n    public RESTResponseObject saveFormData(RESTFormDataModel formDataModel) throws Exception {\n        // 获取静态参数并放入参数对象\n        formDataModel.SetValueByParamName(\"DCT_ID\", \"SYS_OBJECTS\");\n         \n        StubObject SO = RESTfulStaticParamUtil.getSOById(\"saveform\");\n        if (SO != null) {\n            formDataModel.SetValueByParamName(\"DBNO\", SO.getString(\"DBNO\", \"\"));\n            formDataModel.SetValueByParamName(\"DataBaseName\", SO.getString(\"DataBaseName\", \"\"));\n        }\n \n        JParamObject po = formDataModel.getParamObject();\n        System.out.println(\"paramObject = \" + JSON.toJSONString(po));\n         \n        EFFormDataModel formData = formDataModel.getFormData();\n        System.out.println(\"formDataModel = \" + JSON.toJSONString(formData));\n         \n        JResponseObject responseObject = (JResponseObject)EAI.DAL.SVR(\"ESPBillResolver\", po, formData);\n         \n        RESTResponseObject RO = new RESTResponseObject(responseObject);\n        return RO;\n    }\n}\n\npackage osp.test.model;\n \nimport com.efounder.api.jersey.model.RESTParamObject;\nimport com.efounder.form.EFFormDataModel;\n \npublic class RESTFormDataModel extends RESTParamObject{\n    private EFFormDataModel formData;\n \n    public EFFormDataModel getFormData() {\n        return formData;\n    }\n \n    public void setFormData(EFFormDataModel formData) {\n        this.formData = formData;\n    }\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现前后端接口完整调用传参功能",
+        "response": "// 编写API接口\n@RestController\n@RequestMapping(path = \"/demo\")\npublic class OSPDemoController {\n    @PostMapping(\"/list\")\n    public Object loadTreeNodeIds(@RequestBody DemoDTO param){\n        return param;\n    }\n}\n// WebService 服务调用接口\nvar data = {\n    \"code\": 100\n};\nWebService1.POST(\"demo/list\", data);\n\n// 回调函数获取返回值\nvar mes = data.data.code;\nalert(mes);"
+    }
+]

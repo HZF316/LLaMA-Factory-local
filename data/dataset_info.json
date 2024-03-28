@@ -220,14 +220,6 @@
     "ms_hub_url": "AI-ModelScope/WizardLM_evol_instruct_V2_196k",
     "formatting": "sharegpt"
   },
-  "glaive_toolcall_100k": {
-    "hf_hub_url": "hiyouga/glaive-function-calling-v2-sharegpt",
-    "formatting": "sharegpt",
-    "columns": {
-      "messages": "conversations",
-      "tools": "tools"
-    }
-  },
   "cosmopedia": {
     "hf_hub_url": "HuggingFaceTB/cosmopedia",
     "columns": {
@@ -302,16 +294,6 @@
     "file_name": "comparison_gpt4_data_zh.json",
     "file_sha1": "515b18ed497199131ddcc1af950345c11dc5c7fd",
     "ranking": true
-  },
-  "orca_rlhf": {
-    "file_name": "orca_rlhf.json",
-    "file_sha1": "acc8f74d16fd1fc4f68e7d86eaa781c2c3f5ba8e",
-    "ranking": true,
-    "columns": {
-      "prompt": "question",
-      "response": "answer",
-      "system": "system"
-    }
   },
   "nectar_rm": {
     "hf_hub_url": "mlinmg/RLAIF-Nectar",
@@ -392,5 +374,74 @@
       "prompt": "content"
     },
     "folder": "python"
-  }
+  },
+   "functioncode100_alpaca":{
+    "file_name":"functioncode100_alpaca.json",
+    "columns": {
+   	 "prompt": "instruction",
+   	 "query": "input",
+   	 "response": "output"
+     }
+   },
+  "TestSet1.json":{
+    "file_name":"TestSet1.json",
+    "columns":{
+       "prompt":"prompt",
+
+       "response":"response"
+     } 
+  },
+    "front_end_01":{
+    "file_name":"front_end_01.json",
+    "columns":{
+       "prompt":"prompt",
+
+       "response":"response"
+     }
+   },
+    "front_end_02_100":{
+    "file_name":"front_end_02_100.json",
+    "columns":{
+       "prompt":"prompt",
+       "response":"response"
+     }
+   },
+    "back_end_01":{
+    "file_name":"back_end_01.json",
+    "columns":{
+       "prompt":"prompt",
+       "response":"response"
+     }
+   },
+    "osp_function":{
+    "file_name":"osp_function.json",
+    "columns":{
+       "prompt":"prompt",
+       "response":"response"
+     }
+   },
+    "osp_function_withoutosp":{
+    "file_name":"OSP_Function_withoutosp.json",
+    "columns":{
+       "prompt":"prompt",
+       "response":"response",
+       "system":"system"
+     }
+   },
+    "osp_comb_300":{
+    "file_name":"osp_comb_300.json",
+    "columns":{
+       "prompt":"instruction",
+       "response":"response",
+       "system":"system"
+     }
+   },
+       "osp_single_comb23_721":{
+    "file_name":"osp_single_comb23_721.json",
+    "columns":{
+       "prompt":"instruction",
+       "response":"response",
+       "system":"system"
+     }
+   }
 }

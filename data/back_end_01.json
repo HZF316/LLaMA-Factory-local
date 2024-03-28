@@ -1,0 +1,86 @@
+[
+    {
+        "prompt": "在osp开发平台中，实现后台服务插件编写功能",
+        "response": "public class xxPlugin extends ServicePluginAdapter{\n    \n        private static final Logger logger = LoggerFactory.getLogger(xxPlugin .class);\n\n        public Object executeProcessService(ESPServerContext espContext,Object responseObject) throws Exception {\n            ……\n        }\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现后台通过上下文获取PO对象，并获取PO中参数功能",
+        "response": "JParamObject po = espContext.getParamObject();\nString zgbh = po.GetValueByParamName(\"F_ZGBH\", null);\nString loginUser = po.GetValueByEnvName(\"UserName\", null);"
+    },
+    {
+        "prompt": "在osp开发平台中，实现后台通过上下文获取conn数据库链接对象功能",
+        "response": "JConnection conn = espContext.getConnection();"
+    },
+    {
+        "prompt": "在osp开发平台中，实现后台执行查询单表，并获取查询出的值功能",
+        "response": "JResponseObject RO = espContext.getResponseObject();\nJConnection connetion = espContext.getConnection();\nPreparedStatement pstbm = null;\nResultSet rs = null;\nString sql = \"SELECT F_GUID,F_NAME,F_NOTE FROM SYS_FAVMENU_TYPE WHERE F_ZGBH = ?\";\ntry {\n        pstbm = connetion.prepareStatement(sql);\n        pstbm.setString(1, zgbh);\n        rs = pstbm.executeQuery();\n        while (rs.next()) {\n                String bh = rs.getString(\"F_GUID\");\n                ……\n        }\n} catch (Exception e) {\n        logger.error(\"错误信息：{}\" , e.getMessage());\n        RO.setErrorCode(JResponseObject.RES_ERROR);\n        RO.setErrorString(e.getMessage());\n        return RO;\n} finally {\n        JConnection.BackStatement(pstbm, rs);\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现后台执行批处理修改单表功能",
+        "response": "PreparedStatement pstbm = null;\nJConnection connetion = espContext.getConnection();\nString sql = \"UPDATE SYS_FAVMENU SET F_FLMC = ? WHERE F_ZGBH = ? AND F_FLBH = ?\";\ntry {\n        pstbm = connetion.prepareStatement(sql);\n        // 循环拼接值 获取值的方法也可以是循环dataset\n        for (StubObject stub : stubs) {\n                String name = stub.getString(\"F_NAME\", \"\");\n                String flbh = stub.getString(\"F_GUID\", \"\");\n                pstbm.setString(1, name);\n                pstbm.setString(2, zgbh);\n                pstbm.setString(3, flbh);\n                pstbm.addBatch();\n        }\n        pstbm.executeBatch();\n} catch (Exception e) {\n        logger.error(\"错误信息：{}\" , e.getMessage());\n        RO.setErrorCode(JResponseObject.RES_ERROR);\n        RO.setErrorString(e.getMessage());\n        return RO;\n} finally {\n        JConnection.BackStatement(pstbm, null);\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现后台执行批处理插入单表功能",
+        "response": "PreparedStatement pstbm = null;\nJConnection connetion = espContext.getConnection();\nString sql = \"insert into SYS_FAVMENU(F_GUID,F_NAME,F_ZGBH,F_CDBH,F_FLBH,F_FLMC,F_NOTE,F_PXBH)values(?,?,?,?,?,?,?,?)\";\ntry {\n        pstbm = connetion.prepareStatement(sql);\n        // 循环拼接值 获取值的方法也可以是循环dataset\n       for (StubObject stub : stubs) {\n                    String cdbh = stub.getString(\"MenuId\", \"\");\n                    String flbh = stub.getString(\"F_FLBH\", \"\");\n                    String note = stub.getString(\"F_NOTE\", \"\");\n                    String name = stub.getString(\"F_CDMC\", \"\");\n                    String flmc = stub.getString(\"F_FLMC\", \"\");\n                    String pxbh = stub.getString(\"F_PXBH\", \"\");\n                    pstbm.setString(1, UUID.randomUUID().toString());\n                    pstbm.setString(2, name);\n                    pstbm.setString(3, zgbh);\n                    pstbm.setString(4, cdbh);\n                    pstbm.setString(5, flbh);\n                    pstbm.setString(6, flmc);\n                    pstbm.setString(7, note);\n                    pstbm.setString(8, pxbh);\n                    pstbm.addBatch();\n                }\n        pstbm.executeBatch();\n} catch (Exception e) {\n        logger.error(\"错误信息：{}\" , e.getMessage());\n        RO.setErrorCode(JResponseObject.RES_ERROR);\n        RO.setErrorString(e.getMessage());\n        return RO;\n} finally {\n        JConnection.BackStatement(pstbm, null);\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现后台执行删除单表数据功能",
+        "response": "PreparedStatement pstbm = null;\nJConnection connetion = espContext.getConnection();\nString delSql = \"DELETE FROM SYS_FAVMENU WHERE F_ZGBH = ?\";\ntry {\n        pstbm = connetion.prepareStatement(delSql);\n        pstbm.setString(1, zgbh);\n        pstbm.execute();\n} catch (Exception e) {\n        logger.error(\"错误信息：{}\" , e.getMessage());\n        RO.setErrorCode(JResponseObject.RES_ERROR);\n        RO.setErrorString(e.getMessage());\n        return RO;\n} finally {\n        JConnection.BackStatement(pstbm, null);\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现拼接数据库前缀的表名功能",
+        "response": "String tableName = DBTools.getDBAObject(paramObject, \"SYS_OPLOG\");"
+    },
+    {
+        "prompt": "在osp开发平台中，实现将ResultSet中的一行生成到RowSet功能",
+        "response": "f (rs.next()) {\n        DataSetUtils.resultSet2RowSet(rs, rowSet);\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现字典根据上下文获取dctMetaData元数据，获取不到就返回功能",
+        "response": "String DCT_ID = mdmContext.getParamObject().GetValueByParamName(\"DCT_ID\", null);\nDCTMetaData dctMetaData = mdmContext.getDCTMetaData();\nif (dctMetaData == null) {\n        dctMetaData = (DCTMetaData) MetaDataManager.getInstance(MetaDataManager._DCTObject_).getMetaData(mdmContext, DCT_ID);\n        mdmContext.setDCTMetaData(dctMetaData);\n}\nif (dctMetaData == null) return null;"
+    },
+    {
+        "prompt": "在osp开发平台中，实现字典根据dctMetaData元数据获取外键列功能",
+        "response": "String colums[] = dctMetaData.getDoMetaData().getFKeyColIDs();"
+    },
+    {
+        "prompt": "在osp开发平台中，实现字典根据dctMetaData元数据获取指定扩展属性功能",
+        "response": "// 字典扩展属性配置 xx是key\nString xxvalue = dctMetaData.getDoMetaData().getSYS_OBJ_VAL(\"xx\", \"\");"
+    },
+    {
+        "prompt": "在osp开发平台中，实现字典根据mdmDataModel元数据获取插入数据功能",
+        "response": "// 获取插入数据集\nEFDataSet dataSet = mdmDataModel.getDataSet(dcts[i] + \"_INSERT\");"
+    },
+    {
+        "prompt": "在osp开发平台中，实现字典根据mdmDataModel元数据获取删除数据功能",
+        "response": "// 获取插入数据集\nEFDataSet dataSet = mdmDataModel.getDataSet(dcts[i] + \"_DELETE\");"
+    },
+    {
+        "prompt": "在osp开发平台中，实现字典根据mdmDataModel元数据获取修改数据功能",
+        "response": "// 获取插入数据集\nEFDataSet dataSet = mdmDataModel.getDataSet(dcts[i] + \"_UPDATE\");"
+    },
+    {
+        "prompt": "在osp开发平台中，实现定义日志输出日志功能",
+        "response": "private static final Logger logger = LoggerFactory.getLogger(xxPlugin .class);\n// 日志级别由高到底是：fatal -> error -> warn -> info -> debug,低级别的会输出高级别的信息，高级别的不会输出低级别的\nlogger.debug、logger.info、logger.warn、logger.error、logger.fatal \n"
+    },
+    {
+        "prompt": "在osp开发平台中，实现异常输出日志功能",
+        "response": "try{\n......\n} catch (IOException e) {\n    logger.error(\"错误信息：{}\" , e.getMessage());\n    ……\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现异常输出方式功能",
+        "response": "e.printStackTrace();// 打印完整的异常堆栈信息\ne.getMessage();// 打印 异常的原因\ne.toString();// 打印 异常类型 和 异常的原因\ne.getExceptionToString();// 打印完整的异常堆栈信息"
+    },
+    {
+        "prompt": "在osp开发平台中，实现获取配置文件配置值功能",
+        "response": "// package文件中   xx为key\nString value = ParameterManager.getDefault().getSystemParam(\"xx\");"
+    },
+    {
+        "prompt": "在osp开发平台中，实现基于Jersey的单据保存Restful开发功能",
+        "response": "/**\n* @Path :起到定位作用，如 http://localhost:8080/OSPServer/rest/save/saveform，这个链接，通过save定位到类：SaveFormModel，通过saveform定位到方法：saveFormData()；\n* @POST :HTTP方法，还有@GET\n* @Produces :指定将要返回给client端的数据标识类型(MIME)\n* @Consumes :代表的是一个资源可以接受的数据标识类型(MIME)\n* 注：类要继承 BaseRESTfulService以便于获取RESTful服务的基类（HttpServletRequest、HttpServletResponse、ServletConfig、ServletContext、UriInfo、HttpHeaders）\n*/\npackage osp.test;\n \nimport javax.ws.rs.Consumes;\nimport javax.ws.rs.POST;\nimport javax.ws.rs.Path;\nimport javax.ws.rs.Produces;\nimport javax.ws.rs.core.MediaType;\n \nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\n \nimport com.efounder.api.jersey.model.RESTResponseObject;\nimport com.efounder.api.jersey.service.BaseRESTfulService;\nimport com.efounder.eai.EAI;\nimport com.efounder.eai.data.JResponseObject;\nimport com.efounder.form.SuperJsonModel;\n \n@Path(\"/save\")\npublic class SaveFormModel extends BaseRESTfulService{\n    private static final Logger logger = LoggerFactory.getLogger(SaveFormModel.class);\n \n    @POST\n    @Path(\"/saveform\")\n    @Produces(MediaType.APPLICATION_JSON)\n    @Consumes(MediaType.APPLICATION_JSON)\n    public RESTResponseObject saveFormData(RESTFormDataModel formDataModel) throws Exception {\n        // 获取静态参数并放入参数对象\n        formDataModel.SetValueByParamName(\"DCT_ID\", \"SYS_OBJECTS\");\n         \n        StubObject SO = RESTfulStaticParamUtil.getSOById(\"saveform\");\n        if (SO != null) {\n            formDataModel.SetValueByParamName(\"DBNO\", SO.getString(\"DBNO\", \"\"));\n            formDataModel.SetValueByParamName(\"DataBaseName\", SO.getString(\"DataBaseName\", \"\"));\n        }\n \n        JParamObject po = formDataModel.getParamObject();\n        System.out.println(\"paramObject = \" + JSON.toJSONString(po));\n         \n        EFFormDataModel formData = formDataModel.getFormData();\n        System.out.println(\"formDataModel = \" + JSON.toJSONString(formData));\n         \n        JResponseObject responseObject = (JResponseObject)EAI.DAL.SVR(\"ESPBillResolver\", po, formData);\n         \n        RESTResponseObject RO = new RESTResponseObject(responseObject);\n        return RO;\n    }\n}\n\npackage osp.test.model;\n \nimport com.efounder.api.jersey.model.RESTParamObject;\nimport com.efounder.form.EFFormDataModel;\n \npublic class RESTFormDataModel extends RESTParamObject{\n    private EFFormDataModel formData;\n \n    public EFFormDataModel getFormData() {\n        return formData;\n    }\n \n    public void setFormData(EFFormDataModel formData) {\n        this.formData = formData;\n    }\n}"
+    },
+    {
+        "prompt": "在osp开发平台中，实现前后端接口完整调用传参功能",
+        "response": "// 编写API接口\n@RestController\n@RequestMapping(path = \"/demo\")\npublic class OSPDemoController {\n    @PostMapping(\"/list\")\n    public Object loadTreeNodeIds(@RequestBody DemoDTO param){\n        return param;\n    }\n}\n// WebService 服务调用接口\nvar data = {\n    \"code\": 100\n};\nWebService1.POST(\"demo/list\", data);\n\n// 回调函数获取返回值\nvar mes = data.data.code;\nalert(mes);"
+    }
+]

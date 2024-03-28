@@ -1,0 +1,44 @@
+[
+    {
+        "prompt": "在osp开发平台中， 有Q组件，要实现Z功能",
+        "response": "Q.function_z()"
+    },
+    {
+        "prompt": "在osp开发平台中，有W组件，要实现Z功能",
+        "response": "W.function_z()"
+    },
+    {
+        "prompt": "在osp开发平台中，有Q组件，要实现X功能",
+        "response": "Q.function_x()"
+    },
+    {
+        "prompt": "在osp开发平台中，有E组件，要实现X功能",
+        "response": "E.function_x()"
+    },
+    {
+        "prompt": "在osp开发平台中，有E组件与R组件，要实现X功能与C功能",
+        "response": "E.function_x()\n    R.function_c()"
+    },
+    {
+        "prompt": "在osp开发平台中，有Q组件，要实现V功能",
+        "response": "Q.function_v()"
+    },
+    {
+        "prompt": "在osp开发平台中，有Q组件，要实现B功能",
+        "response": "Q.function_b()"
+    },
+    {
+        "prompt": "在osp开发平台中，有Q组件，要实现B功能和C功能",
+        "response": "Q.function_b()\n    Q.function_c()"
+    },
+
+    {
+        "prompt": "在osp开发平台中，有Q组件和T组件，要实现B功能、N功能和M功能",
+        "response": "Q.function_b()\n    T.function_n()\n    Q.function_m()"
+    },
+    {
+        "prompt": "在osp开发平台中，有Y组件，要实现B功能、C功能和L功能",
+        "response": "Y.function_b()\n   Y.function_c()\n    Y.function_l()"
+    }
+
+]
